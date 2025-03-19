@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Activity, Dumbbell, Yoga } from 'lucide-react';
+import { Activity, Dumbbell, Stretch } from 'lucide-react';
 import { ExerciseType } from '@/types/workout';
 import { cn } from '@/lib/utils';
 
@@ -42,7 +42,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
     { id: 'All', label: 'All Workouts', icon: null },
     { id: 'Cardio', label: 'Cardio', icon: <Activity className="h-4 w-4" /> },
     { id: 'Strength', label: 'Strength', icon: <Dumbbell className="h-4 w-4" /> },
-    { id: 'Flexibility', label: 'Flexibility', icon: <Yoga className="h-4 w-4" /> },
+    { id: 'Flexibility', label: 'Flexibility', icon: <Stretch className="h-4 w-4" /> },
   ];
 
   return (
