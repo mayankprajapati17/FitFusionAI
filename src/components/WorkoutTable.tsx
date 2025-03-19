@@ -46,8 +46,8 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   const typeCell = (props: any) => {
     return (
       <td>
-        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)} text={props.dataItem.exerciseType}>
-          {/* Now we're using Badge correctly - no icon prop, we put icon as a child */}
+        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)}>
+          {props.dataItem.exerciseType}
         </Badge>
       </td>
     );
@@ -80,7 +80,9 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   const actionsCell = () => {
     return (
       <td className="text-right">
-        <Button icon="more-vertical" look="flat" />
+        <Button className="k-button k-button-flat">
+          <MoreVertical className="h-5 w-5" />
+        </Button>
       </td>
     );
   };

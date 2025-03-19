@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { WorkoutFormData, ExerciseType } from '../types/workout';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
+import { Button } from '@progress/kendo-react-buttons';
+import { Input, NumericTextBox } from '@progress/kendo-react-inputs';
+import { DropDownList } from '@progress/kendo-react-dropdowns';
+import { TextArea } from '@progress/kendo-react-inputs';
 
 interface WorkoutFormProps {
   onSubmit: (data: WorkoutFormData) => void;
@@ -18,6 +22,8 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
     reps: 0,
   });
 
+  const exerciseTypes: ExerciseType[] = ['Strength', 'Cardio', 'Flexibility'];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
@@ -28,6 +34,18 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
     }
   };
 
+  const handleNumericChange = (e: any, fieldName: string) => {
+    if (e.value !== null && e.value !== undefined) {
+      setFormData({ ...formData, [fieldName]: e.value });
+    } else {
+      setFormData({ ...formData, [fieldName]: 0 });
+    }
+  };
+
+  const handleTypeChange = (e: any) => {
+    setFormData({ ...formData, exerciseType: e.value });
+  };
+
   const handleDateChange = (e: any) => {
     if (e.value) {
       const date = new Date(e.value);
@@ -36,6 +54,14 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
         date: date.toISOString().split('T')[0]
       });
     }
+  };
+
+  const handleTextChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.value });
+  };
+
+  const handleNotesChange = (e: any) => {
+    setFormData({ ...formData, notes: e.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,29 +105,24 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Exercise Name</label>
-                <input
-                  type="text"
+                <Input
                   name="exerciseName"
                   value={formData.exerciseName}
-                  onChange={handleChange}
+                  onChange={handleTextChange}
                   placeholder="e.g. Push-ups"
                   required
-                  className="elegant-input w-full"
+                  className="w-full"
                 />
               </div>
               
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Exercise Type</label>
-                <select
-                  name="exerciseType"
+                <DropDownList
+                  data={exerciseTypes}
                   value={formData.exerciseType}
-                  onChange={handleChange}
-                  className="elegant-input w-full"
-                >
-                  <option value="Strength">Strength</option>
-                  <option value="Cardio">Cardio</option>
-                  <option value="Flexibility">Flexibility</option>
-                </select>
+                  onChange={handleTypeChange}
+                  className="w-full"
+                />
               </div>
               
               <div className="space-y-2">
@@ -118,14 +139,13 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                 <label className="text-sm font-medium text-slate-700">
                   {formData.exerciseType === 'Cardio' ? 'Repetitions (e.g. 1 for one session)' : 'Repetitions'}
                 </label>
-                <input
-                  type="number"
+                <NumericTextBox
                   name="reps"
-                  value={formData.reps || ''}
-                  onChange={handleChange}
-                  min="0"
+                  value={formData.reps}
+                  onChange={(e) => handleNumericChange(e, 'reps')}
+                  min={0}
                   placeholder="e.g. 12"
-                  className="elegant-input w-full"
+                  className="w-full"
                 />
               </div>
               
@@ -133,28 +153,26 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                 <>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-700">Sets</label>
-                    <input
-                      type="number"
+                    <NumericTextBox
                       name="sets"
-                      value={formData.sets || ''}
-                      onChange={handleChange}
-                      min="0"
+                      value={formData.sets || 0}
+                      onChange={(e) => handleNumericChange(e, 'sets')}
+                      min={0}
                       placeholder="e.g. 3"
-                      className="elegant-input w-full"
+                      className="w-full"
                     />
                   </div>
                   
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-700">Weight (kg)</label>
-                    <input
-                      type="number"
+                    <NumericTextBox
                       name="weight"
-                      value={formData.weight || ''}
-                      onChange={handleChange}
-                      min="0"
-                      step="0.5"
+                      value={formData.weight || 0}
+                      onChange={(e) => handleNumericChange(e, 'weight')}
+                      min={0}
+                      step={0.5}
                       placeholder="e.g. 50"
-                      className="elegant-input w-full"
+                      className="w-full"
                     />
                   </div>
                 </>
@@ -163,14 +181,13 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
               {(formData.exerciseType === 'Cardio' || formData.exerciseType === 'Flexibility') && (
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">Duration (minutes)</label>
-                  <input
-                    type="number"
+                  <NumericTextBox
                     name="duration"
-                    value={formData.duration || ''}
-                    onChange={handleChange}
-                    min="0"
+                    value={formData.duration || 0}
+                    onChange={(e) => handleNumericChange(e, 'duration')}
+                    min={0}
                     placeholder="e.g. 30"
-                    className="elegant-input w-full"
+                    className="w-full"
                   />
                 </div>
               )}
@@ -178,30 +195,30 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
             
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700">Notes</label>
-              <textarea
+              <TextArea
                 name="notes"
                 value={formData.notes || ''}
-                onChange={handleChange}
+                onChange={handleNotesChange}
                 placeholder="Add any additional information here..."
                 rows={3}
-                className="elegant-input w-full"
+                className="w-full"
               />
             </div>
             
             <div className="flex justify-end space-x-4 pt-4">
-              <button
+              <Button
                 type="button"
                 onClick={handleClear}
-                className="elegant-secondary-button"
+                className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
               >
                 Clear
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="elegant-primary-button"
+                className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
               >
                 Save Workout
-              </button>
+              </Button>
             </div>
           </form>
         </div>
