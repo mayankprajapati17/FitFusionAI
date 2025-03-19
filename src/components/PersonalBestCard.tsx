@@ -3,6 +3,8 @@ import React from 'react';
 import { Trophy } from 'lucide-react';
 import { Workout } from '@/types/workout';
 import { findPersonalBest } from '@/utils/mockData';
+import { Card, CardTitle, CardBody, CardActions } from '@progress/kendo-react-layout';
+import { Badge } from '@progress/kendo-react-indicators';
 
 interface PersonalBestCardProps {
   workouts: Workout[];
@@ -63,23 +65,22 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
   };
   
   return (
-    <div className="elegant-card animate-fade-up">
-      <div className="flex justify-between items-start">
-        <div>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600 mb-2">
-            <Trophy className="h-3.5 w-3.5" />
-            Personal Best
-          </span>
-          <h3 className="text-base font-semibold">
-            {personalBest.exerciseName}
-          </h3>
-          {renderAchievement()}
+    <Card className="elegant-card animate-fade-up">
+      <CardBody>
+        <div className="flex justify-between items-start">
+          <div>
+            <Badge themeColor="warning" icon={<Trophy className="h-3.5 w-3.5" />} text="Personal Best" />
+            <CardTitle className="text-base font-semibold mt-2">
+              {personalBest.exerciseName}
+            </CardTitle>
+            {renderAchievement()}
+          </div>
+          <div className="text-sm text-slate-400">
+            {formatDate(personalBest.date)}
+          </div>
         </div>
-        <div className="text-sm text-slate-400">
-          {formatDate(personalBest.date)}
-        </div>
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 

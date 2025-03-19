@@ -1,8 +1,11 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Workout, ExerciseType } from '@/types/workout';
-import { ChevronDown, ChevronUp, Filter, MoreVertical, ArrowUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Grid, GridColumn, GridSortChangeEvent } from '@progress/kendo-react-grid';
+import { orderBy, SortDescriptor } from '@progress/kendo-data-query';
+import { MoreVertical } from 'lucide-react';
+import { Button } from '@progress/kendo-react-buttons';
+import { Badge } from '@progress/kendo-react-indicators';
 
 interface WorkoutTableProps {
   workouts: Workout[];
@@ -20,123 +23,99 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   
   const getTypeColor = (type: ExerciseType) => {
     switch (type) {
-      case 'Cardio': return 'text-blue-600 bg-blue-50';
-      case 'Strength': return 'text-orange-600 bg-orange-50';
-      case 'Flexibility': return 'text-emerald-600 bg-emerald-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'Cardio': return 'info';
+      case 'Strength': return 'warning';
+      case 'Flexibility': return 'success';
+      default: return 'default';
     }
   };
 
-  const renderSortIcon = (column: keyof Workout) => {
-    if (sortColumn !== column) {
-      return <ArrowUpDown className="ml-1 h-4 w-4 text-muted-foreground/50" />;
-    }
-    return sortDirection === 'asc' 
-      ? <ChevronUp className="ml-1 h-4 w-4 text-fitness-600" /> 
-      : <ChevronDown className="ml-1 h-4 w-4 text-fitness-600" />;
+  const formatDate = (props: any) => {
+    const date = new Date(props.dataItem.date);
+    return (
+      <td>
+        {new Intl.DateTimeFormat('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        }).format(date)}
+      </td>
+    );
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }).format(date);
+  const typeCell = (props: any) => {
+    return (
+      <td>
+        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)} text={props.dataItem.exerciseType} />
+      </td>
+    );
   };
+
+  const repsCell = (props: any) => {
+    const { dataItem } = props;
+    return (
+      <td>
+        {dataItem.exerciseType === 'Strength' && dataItem.sets 
+          ? `${dataItem.reps} × ${dataItem.sets}` 
+          : dataItem.reps}
+      </td>
+    );
+  };
+
+  const detailsCell = (props: any) => {
+    const { dataItem } = props;
+    return (
+      <td>
+        {dataItem.weight && `${dataItem.weight}kg`}
+        {dataItem.duration && `${dataItem.duration} min`}
+        {dataItem.notes && dataItem.notes.length > 25
+          ? `${dataItem.notes.substring(0, 25)}...`
+          : dataItem.notes}
+      </td>
+    );
+  };
+
+  const actionsCell = () => {
+    return (
+      <td className="text-right">
+        <Button icon={<MoreVertical />} look="flat" />
+      </td>
+    );
+  };
+
+  const handleSortChange = (e: GridSortChangeEvent) => {
+    if (e.sort && e.sort.length > 0) {
+      const column = e.sort[0].field as keyof Workout;
+      onSortChange(column);
+    }
+  };
+
+  const sort: Array<SortDescriptor> = [
+    {
+      field: sortColumn,
+      dir: sortDirection
+    }
+  ];
 
   return (
     <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-elegant animate-fade-up">
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-slate-200 bg-slate-50/80">
-              <th className="p-4 text-left text-sm font-medium text-slate-500">
-                <button 
-                  className="flex items-center focus:outline-none"
-                  onClick={() => onSortChange('date')}
-                >
-                  Date
-                  {renderSortIcon('date')}
-                </button>
-              </th>
-              <th className="p-4 text-left text-sm font-medium text-slate-500">
-                <button 
-                  className="flex items-center focus:outline-none"
-                  onClick={() => onSortChange('exerciseName')}
-                >
-                  Exercise
-                  {renderSortIcon('exerciseName')}
-                </button>
-              </th>
-              <th className="p-4 text-left text-sm font-medium text-slate-500">
-                <button 
-                  className="flex items-center focus:outline-none"
-                  onClick={() => onSortChange('exerciseType')}
-                >
-                  Type
-                  {renderSortIcon('exerciseType')}
-                </button>
-              </th>
-              <th className="p-4 text-left text-sm font-medium text-slate-500">
-                <button 
-                  className="flex items-center focus:outline-none"
-                  onClick={() => onSortChange('reps')}
-                >
-                  Reps/Sets
-                  {renderSortIcon('reps')}
-                </button>
-              </th>
-              <th className="p-4 text-left text-sm font-medium text-slate-500">Details</th>
-              <th className="p-4 text-right text-sm font-medium text-slate-500"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200">
-            {workouts.length > 0 ? (
-              workouts.map((workout) => (
-                <tr 
-                  key={workout.id} 
-                  className="transition-colors hover:bg-slate-50"
-                >
-                  <td className="p-4 text-sm text-slate-700">{formatDate(workout.date)}</td>
-                  <td className="p-4 text-sm font-medium">{workout.exerciseName}</td>
-                  <td className="p-4">
-                    <span className={cn(
-                      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                      getTypeColor(workout.exerciseType)
-                    )}>
-                      {workout.exerciseType}
-                    </span>
-                  </td>
-                  <td className="p-4 text-sm">
-                    {workout.exerciseType === 'Strength' && workout.sets 
-                      ? `${workout.reps} × ${workout.sets}` 
-                      : workout.reps}
-                  </td>
-                  <td className="p-4 text-sm text-slate-600">
-                    {workout.weight && `${workout.weight}kg`}
-                    {workout.duration && `${workout.duration} min`}
-                    {workout.notes && workout.notes.length > 25
-                      ? `${workout.notes.substring(0, 25)}...`
-                      : workout.notes}
-                  </td>
-                  <td className="p-4 text-right">
-                    <button className="text-slate-400 hover:text-slate-600">
-                      <MoreVertical className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} className="p-8 text-center text-slate-500">
-                  No workouts found. Start by logging your first workout!
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Grid
+        data={orderBy(workouts, sort)}
+        sortable={{
+          allowUnsort: false,
+          mode: 'single'
+        }}
+        sort={sort}
+        onSortChange={handleSortChange}
+        style={{ height: 'auto' }}
+      >
+        <GridColumn field="date" title="Date" cell={formatDate} />
+        <GridColumn field="exerciseName" title="Exercise" />
+        <GridColumn field="exerciseType" title="Type" cell={typeCell} />
+        <GridColumn field="reps" title="Reps/Sets" cell={repsCell} />
+        <GridColumn field="details" title="Details" cell={detailsCell} />
+        <GridColumn field="actions" title="" cell={actionsCell} width="70px" />
+      </Grid>
     </div>
   );
 };
