@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { WorkoutFormData, ExerciseType } from '../types/workout';
+import { DatePicker } from '@progress/kendo-react-dateinputs';
 
 interface WorkoutFormProps {
   onSubmit: (data: WorkoutFormData) => void;
@@ -24,6 +25,16 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
       setFormData({ ...formData, [name]: parseFloat(value) || 0 });
     } else {
       setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleDateChange = (e: any) => {
+    if (e.value) {
+      const date = new Date(e.value);
+      setFormData({
+        ...formData,
+        date: date.toISOString().split('T')[0]
+      });
     }
   };
 
@@ -95,12 +106,11 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
               
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Date</label>
-                <input
-                  type="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  className="elegant-input w-full"
+                <DatePicker
+                  value={new Date(formData.date)}
+                  onChange={handleDateChange}
+                  format="MMMM d, yyyy"
+                  className="w-full"
                 />
               </div>
               

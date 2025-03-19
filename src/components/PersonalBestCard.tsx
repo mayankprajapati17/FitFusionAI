@@ -69,7 +69,9 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
       <CardBody>
         <div className="flex justify-between items-start">
           <div>
-            <Badge themeColor="warning" icon={<Trophy className="h-3.5 w-3.5" />} text="Personal Best" />
+            <Badge themeColor="warning" text="Personal Best">
+              <Trophy className="h-3.5 w-3.5 mr-1" />
+            </Badge>
             <CardTitle className="text-base font-semibold mt-2">
               {personalBest.exerciseName}
             </CardTitle>

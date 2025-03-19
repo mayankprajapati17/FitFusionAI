@@ -26,7 +26,7 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
       case 'Cardio': return 'info';
       case 'Strength': return 'warning';
       case 'Flexibility': return 'success';
-      default: return 'default';
+      default: return 'primary'; // Changed from 'default' to 'primary' as 'default' is not a valid themeColor
     }
   };
 
@@ -46,7 +46,9 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   const typeCell = (props: any) => {
     return (
       <td>
-        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)} text={props.dataItem.exerciseType} />
+        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)} text={props.dataItem.exerciseType}>
+          {/* Now we're using Badge correctly - no icon prop, we put icon as a child */}
+        </Badge>
       </td>
     );
   };
@@ -78,7 +80,7 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   const actionsCell = () => {
     return (
       <td className="text-right">
-        <Button icon={<MoreVertical />} look="flat" />
+        <Button icon="more-vertical" look="flat" />
       </td>
     );
   };
