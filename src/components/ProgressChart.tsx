@@ -1,8 +1,10 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Workout } from '@/types/workout';
 import { calculateWeeklyProgress } from '@/utils/mockData';
 import { ProgressBar } from '@progress/kendo-react-progressbars';
+import { Chart, ChartSeries, ChartSeriesItem } from '@progress/kendo-react-charts';
+import 'hammerjs';
 
 interface ProgressChartProps {
   workouts: Workout[];
@@ -13,8 +15,9 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
   
   return (
     <div className="elegant-card animate-fade-up">
-      <h3 className="text-base font-semibold mb-2">Weekly Goal Progress</h3>
-      <div className="flex items-center gap-4">
+      <h3 className="text-base font-semibold mb-4">Weekly Goal Progress</h3>
+      
+      <div className="flex items-center gap-4 mb-3">
         <div className="flex-1">
           <ProgressBar
             value={progressValue}
@@ -33,7 +36,26 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
           {progressValue}%
         </div>
       </div>
-      <p className="text-xs text-slate-500 mt-2">
+      
+      <div className="h-28 mt-4">
+        <Chart>
+          <ChartSeries>
+            <ChartSeriesItem
+              type="column"
+              data={[20, 40, 45, 30, 50, 60, progressValue]}
+              color="#4338ca"
+              labels={{
+                visible: false
+              }}
+              categoryAxis={{
+                categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+              }}
+            />
+          </ChartSeries>
+        </Chart>
+      </div>
+      
+      <p className="text-xs text-slate-500 mt-3">
         Goal: 1,000 reps this week
       </p>
     </div>

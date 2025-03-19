@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+
+import React from 'react';
 import { TabStrip, TabStripTab } from '@progress/kendo-react-layout';
 import { Activity, Dumbbell, Leaf } from 'lucide-react';
 import { ExerciseType } from '@/types/workout';

@@ -3,7 +3,7 @@ import React from 'react';
 import { Trophy } from 'lucide-react';
 import { Workout } from '@/types/workout';
 import { findPersonalBest } from '@/utils/mockData';
-import { Card, CardTitle, CardBody, CardActions } from '@progress/kendo-react-layout';
+import { Card, CardBody } from '@progress/kendo-react-layout';
 import { Badge } from '@progress/kendo-react-indicators';
 
 interface PersonalBestCardProps {
@@ -73,9 +73,9 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
               <Trophy className="h-3.5 w-3.5 mr-1" />
               Personal Best
             </Badge>
-            <CardTitle className="text-base font-semibold mt-2">
+            <h3 className="text-base font-semibold mt-2">
               {personalBest.exerciseName}
-            </CardTitle>
+            </h3>
             {renderAchievement()}
           </div>
           <div className="text-sm text-slate-400">

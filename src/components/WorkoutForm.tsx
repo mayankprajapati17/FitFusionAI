@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { WorkoutFormData, ExerciseType } from '../types/workout';
+import { Form, Field, FormElement, FieldWrapper } from '@progress/kendo-react-form';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Input, NumericTextBox } from '@progress/kendo-react-inputs';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { TextArea } from '@progress/kendo-react-inputs';
+import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
 
 interface WorkoutFormProps {
   onSubmit: (data: WorkoutFormData) => void;
@@ -24,22 +26,8 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
 
   const exerciseTypes: ExerciseType[] = ['Strength', 'Cardio', 'Flexibility'];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    if (name === 'reps' || name === 'sets' || name === 'weight' || name === 'duration') {
-      setFormData({ ...formData, [name]: parseFloat(value) || 0 });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleNumericChange = (e: any, fieldName: string) => {
-    if (e.value !== null && e.value !== undefined) {
-      setFormData({ ...formData, [fieldName]: e.value });
-    } else {
-      setFormData({ ...formData, [fieldName]: 0 });
-    }
+  const handleChange = (e: any, fieldName: string) => {
+    setFormData({ ...formData, [fieldName]: e.value });
   };
 
   const handleTypeChange = (e: any) => {
@@ -56,16 +44,7 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
     }
   };
 
-  const handleTextChange = (e: any) => {
-    setFormData({ ...formData, [e.target.name]: e.value });
-  };
-
-  const handleNotesChange = (e: any) => {
-    setFormData({ ...formData, notes: e.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onSubmit(formData);
     // Reset form
     setFormData({
@@ -88,142 +67,127 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-lg mx-auto animate-scale-in">
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
-          <div className="flex items-center justify-between p-6 border-b border-slate-200">
-            <h2 className="text-xl font-medium">Log New Workout</h2>
-            <button 
-              onClick={onCancel} 
-              className="text-slate-400 hover:text-slate-600 rounded-full p-1 transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Exercise Name</label>
-                <Input
-                  name="exerciseName"
-                  value={formData.exerciseName}
-                  onChange={handleTextChange}
-                  placeholder="e.g. Push-ups"
-                  required
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Exercise Type</label>
-                <DropDownList
-                  data={exerciseTypes}
-                  value={formData.exerciseType}
-                  onChange={handleTypeChange}
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Date</label>
-                <DatePicker
-                  value={new Date(formData.date)}
-                  onChange={handleDateChange}
-                  format="MMMM d, yyyy"
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
-                  {formData.exerciseType === 'Cardio' ? 'Repetitions (e.g. 1 for one session)' : 'Repetitions'}
-                </label>
-                <NumericTextBox
-                  name="reps"
-                  value={formData.reps}
-                  onChange={(e) => handleNumericChange(e, 'reps')}
-                  min={0}
-                  placeholder="e.g. 12"
-                  className="w-full"
-                />
-              </div>
-              
-              {formData.exerciseType === 'Strength' && (
-                <>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Sets</label>
-                    <NumericTextBox
-                      name="sets"
-                      value={formData.sets || 0}
-                      onChange={(e) => handleNumericChange(e, 'sets')}
-                      min={0}
-                      placeholder="e.g. 3"
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Weight (kg)</label>
-                    <NumericTextBox
-                      name="weight"
-                      value={formData.weight || 0}
-                      onChange={(e) => handleNumericChange(e, 'weight')}
-                      min={0}
-                      step={0.5}
-                      placeholder="e.g. 50"
-                      className="w-full"
-                    />
-                  </div>
-                </>
-              )}
-              
-              {(formData.exerciseType === 'Cardio' || formData.exerciseType === 'Flexibility') && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Duration (minutes)</label>
-                  <NumericTextBox
-                    name="duration"
-                    value={formData.duration || 0}
-                    onChange={(e) => handleNumericChange(e, 'duration')}
-                    min={0}
-                    placeholder="e.g. 30"
-                    className="w-full"
+    <Dialog title="Log New Workout" onClose={onCancel} width={600}>
+      <Form
+        onSubmit={handleSubmit}
+        initialValues={formData}
+        render={(formRenderProps) => (
+          <FormElement>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FieldWrapper label="Exercise Name">
+                  <Field
+                    name="exerciseName"
+                    component={Input}
+                    value={formData.exerciseName}
+                    onChange={(e) => handleChange(e, 'exerciseName')}
+                    placeholder="e.g. Push-ups"
+                    required
                   />
-                </div>
-              )}
+                </FieldWrapper>
+                
+                <FieldWrapper label="Exercise Type">
+                  <Field
+                    name="exerciseType"
+                    component={DropDownList}
+                    data={exerciseTypes}
+                    value={formData.exerciseType}
+                    onChange={handleTypeChange}
+                  />
+                </FieldWrapper>
+                
+                <FieldWrapper label="Date">
+                  <Field
+                    name="date"
+                    component={DatePicker}
+                    value={new Date(formData.date)}
+                    onChange={handleDateChange}
+                    format="MMMM d, yyyy"
+                  />
+                </FieldWrapper>
+                
+                <FieldWrapper label={formData.exerciseType === 'Cardio' ? 'Repetitions (e.g. 1 for one session)' : 'Repetitions'}>
+                  <Field
+                    name="reps"
+                    component={NumericTextBox}
+                    value={formData.reps}
+                    onChange={(e) => handleChange(e, 'reps')}
+                    min={0}
+                    placeholder="e.g. 12"
+                  />
+                </FieldWrapper>
+                
+                {formData.exerciseType === 'Strength' && (
+                  <>
+                    <FieldWrapper label="Sets">
+                      <Field
+                        name="sets"
+                        component={NumericTextBox}
+                        value={formData.sets || 0}
+                        onChange={(e) => handleChange(e, 'sets')}
+                        min={0}
+                        placeholder="e.g. 3"
+                      />
+                    </FieldWrapper>
+                    
+                    <FieldWrapper label="Weight (kg)">
+                      <Field
+                        name="weight"
+                        component={NumericTextBox}
+                        value={formData.weight || 0}
+                        onChange={(e) => handleChange(e, 'weight')}
+                        min={0}
+                        step={0.5}
+                        placeholder="e.g. 50"
+                      />
+                    </FieldWrapper>
+                  </>
+                )}
+                
+                {(formData.exerciseType === 'Cardio' || formData.exerciseType === 'Flexibility') && (
+                  <FieldWrapper label="Duration (minutes)">
+                    <Field
+                      name="duration"
+                      component={NumericTextBox}
+                      value={formData.duration || 0}
+                      onChange={(e) => handleChange(e, 'duration')}
+                      min={0}
+                      placeholder="e.g. 30"
+                    />
+                  </FieldWrapper>
+                )}
+              </div>
+              
+              <FieldWrapper label="Notes">
+                <Field
+                  name="notes"
+                  component={TextArea}
+                  value={formData.notes || ''}
+                  onChange={(e) => handleChange(e, 'notes')}
+                  placeholder="Add any additional information here..."
+                  rows={3}
+                />
+              </FieldWrapper>
             </div>
             
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Notes</label>
-              <TextArea
-                name="notes"
-                value={formData.notes || ''}
-                onChange={handleNotesChange}
-                placeholder="Add any additional information here..."
-                rows={3}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="flex justify-end space-x-4 pt-4">
-              <Button
-                type="button"
+            <DialogActionsBar>
+              <Button 
+                className="k-button k-button-md k-button-solid k-button-solid-base"
                 onClick={handleClear}
-                className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
               >
                 Clear
               </Button>
               <Button
-                type="submit"
-                className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+                className="k-button k-button-md k-button-solid k-button-solid-primary"
+                onClick={handleSubmit}
               >
                 Save Workout
               </Button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+            </DialogActionsBar>
+          </FormElement>
+        )}
+      />
+    </Dialog>
   );
 };
 
