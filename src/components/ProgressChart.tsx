@@ -3,7 +3,7 @@ import React from 'react';
 import { Workout } from '@/types/workout';
 import { calculateWeeklyProgress } from '@/utils/mockData';
 import { ProgressBar } from '@progress/kendo-react-progressbars';
-import { Chart, ChartSeries, ChartSeriesItem } from '@progress/kendo-react-charts';
+import { Chart, ChartSeries, ChartSeriesItem, ChartCategoryAxis, ChartCategoryAxisItem } from '@progress/kendo-react-charts';
 import 'hammerjs';
 
 interface ProgressChartProps {
@@ -12,6 +12,7 @@ interface ProgressChartProps {
 
 const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
   const progressValue = calculateWeeklyProgress(workouts);
+  const categories = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   
   return (
     <div className="elegant-card animate-fade-up">
@@ -39,6 +40,9 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
       
       <div className="h-28 mt-4">
         <Chart>
+          <ChartCategoryAxis>
+            <ChartCategoryAxisItem categories={categories} />
+          </ChartCategoryAxis>
           <ChartSeries>
             <ChartSeriesItem
               type="column"
@@ -46,9 +50,6 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
               color="#4338ca"
               labels={{
                 visible: false
-              }}
-              categoryAxis={{
-                categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
               }}
             />
           </ChartSeries>

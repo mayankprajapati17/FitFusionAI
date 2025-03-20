@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { WorkoutFormData, ExerciseType } from '../types/workout';
-import { Form, Field, FormElement, FieldWrapper } from '@progress/kendo-react-form';
+import { Form, Field, FormElement } from '@progress/kendo-react-form';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Input, NumericTextBox } from '@progress/kendo-react-inputs';
@@ -75,8 +75,10 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
           <FormElement>
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FieldWrapper label="Exercise Name">
+                <div>
+                  <label htmlFor="exerciseName" className="block text-gray-700 mb-2">Exercise Name</label>
                   <Field
+                    id="exerciseName"
                     name="exerciseName"
                     component={Input}
                     value={formData.exerciseName}
@@ -84,30 +86,38 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                     placeholder="e.g. Push-ups"
                     required
                   />
-                </FieldWrapper>
+                </div>
                 
-                <FieldWrapper label="Exercise Type">
+                <div>
+                  <label htmlFor="exerciseType" className="block text-gray-700 mb-2">Exercise Type</label>
                   <Field
+                    id="exerciseType"
                     name="exerciseType"
                     component={DropDownList}
                     data={exerciseTypes}
                     value={formData.exerciseType}
                     onChange={handleTypeChange}
                   />
-                </FieldWrapper>
+                </div>
                 
-                <FieldWrapper label="Date">
+                <div>
+                  <label htmlFor="date" className="block text-gray-700 mb-2">Date</label>
                   <Field
+                    id="date"
                     name="date"
                     component={DatePicker}
                     value={new Date(formData.date)}
                     onChange={handleDateChange}
                     format="MMMM d, yyyy"
                   />
-                </FieldWrapper>
+                </div>
                 
-                <FieldWrapper label={formData.exerciseType === 'Cardio' ? 'Repetitions (e.g. 1 for one session)' : 'Repetitions'}>
+                <div>
+                  <label htmlFor="reps" className="block text-gray-700 mb-2">
+                    {formData.exerciseType === 'Cardio' ? 'Repetitions (e.g. 1 for one session)' : 'Repetitions'}
+                  </label>
                   <Field
+                    id="reps"
                     name="reps"
                     component={NumericTextBox}
                     value={formData.reps}
@@ -115,12 +125,14 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                     min={0}
                     placeholder="e.g. 12"
                   />
-                </FieldWrapper>
+                </div>
                 
                 {formData.exerciseType === 'Strength' && (
                   <>
-                    <FieldWrapper label="Sets">
+                    <div>
+                      <label htmlFor="sets" className="block text-gray-700 mb-2">Sets</label>
                       <Field
+                        id="sets"
                         name="sets"
                         component={NumericTextBox}
                         value={formData.sets || 0}
@@ -128,10 +140,12 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                         min={0}
                         placeholder="e.g. 3"
                       />
-                    </FieldWrapper>
+                    </div>
                     
-                    <FieldWrapper label="Weight (kg)">
+                    <div>
+                      <label htmlFor="weight" className="block text-gray-700 mb-2">Weight (kg)</label>
                       <Field
+                        id="weight"
                         name="weight"
                         component={NumericTextBox}
                         value={formData.weight || 0}
@@ -140,13 +154,15 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                         step={0.5}
                         placeholder="e.g. 50"
                       />
-                    </FieldWrapper>
+                    </div>
                   </>
                 )}
                 
                 {(formData.exerciseType === 'Cardio' || formData.exerciseType === 'Flexibility') && (
-                  <FieldWrapper label="Duration (minutes)">
+                  <div>
+                    <label htmlFor="duration" className="block text-gray-700 mb-2">Duration (minutes)</label>
                     <Field
+                      id="duration"
                       name="duration"
                       component={NumericTextBox}
                       value={formData.duration || 0}
@@ -154,12 +170,14 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                       min={0}
                       placeholder="e.g. 30"
                     />
-                  </FieldWrapper>
+                  </div>
                 )}
               </div>
               
-              <FieldWrapper label="Notes">
+              <div>
+                <label htmlFor="notes" className="block text-gray-700 mb-2">Notes</label>
                 <Field
+                  id="notes"
                   name="notes"
                   component={TextArea}
                   value={formData.notes || ''}
@@ -167,7 +185,7 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ onSubmit, onCancel, isOpen })
                   placeholder="Add any additional information here..."
                   rows={3}
                 />
-              </FieldWrapper>
+              </div>
             </div>
             
             <DialogActionsBar>
