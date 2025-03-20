@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Dumbbell, Home, BarChart3, Plus, User } from 'lucide-react';
-import { Button } from '@progress/kendo-react-buttons';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
@@ -19,15 +20,15 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <NavLink href="#" icon={<Home className="h-4 w-4" />} active>Dashboard</NavLink>
+            <NavLink href="/" icon={<Home className="h-4 w-4" />}>Dashboard</NavLink>
             <NavLink href="#" icon={<BarChart3 className="h-4 w-4" />}>Stats</NavLink>
-            <NavLink href="#" icon={<User className="h-4 w-4" />}>Profile</NavLink>
+            <NavLink href="/profile" icon={<User className="h-4 w-4" />}>Profile</NavLink>
           </nav>
           
           <div className="flex items-center gap-4">
             <Button
               onClick={onAddWorkoutClick}
-              className="hidden sm:flex items-center gap-2 k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+              className="hidden sm:flex items-center gap-2"
             >
               <Plus className="h-4 w-4" />
               Log Workout
@@ -35,7 +36,9 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
             
             <Button 
               onClick={onAddWorkoutClick}
-              className="sm:hidden p-2 rounded-full bg-fitness-600 text-white k-button k-button-md k-button-solid k-button-solid-primary"
+              variant="outline"
+              size="icon"
+              className="sm:hidden"
             >
               <Plus className="h-5 w-5" />
             </Button>
@@ -54,19 +57,21 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ href, icon, children, active }) => {
+  const isCurrentPage = window.location.pathname === href;
+  
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={cn(
         "flex items-center gap-1.5 text-sm font-medium transition-colors py-2",
-        active 
+        isCurrentPage || active
           ? "text-fitness-600" 
           : "text-muted-foreground hover:text-foreground"
       )}
     >
       {icon}
       <span>{children}</span>
-    </a>
+    </Link>
   );
 };
 
