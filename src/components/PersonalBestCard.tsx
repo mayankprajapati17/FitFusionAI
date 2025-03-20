@@ -3,8 +3,8 @@ import React from 'react';
 import { Trophy } from 'lucide-react';
 import { Workout } from '@/types/workout';
 import { findPersonalBest } from '@/utils/mockData';
-import { Card, CardBody } from '@progress/kendo-react-layout';
-import { Badge } from '@progress/kendo-react-indicators';
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface PersonalBestCardProps {
   workouts: Workout[];
@@ -29,7 +29,7 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
     if (personalBest.exerciseType === 'Strength' && personalBest.weight) {
       return (
         <div className="mt-2">
-          <div className="text-3xl font-bold text-fitness-600">
+          <div className="text-3xl font-bold text-indigo-600">
             {personalBest.weight} kg
           </div>
           <div className="text-sm text-slate-500">
@@ -42,7 +42,7 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
     if (personalBest.exerciseType === 'Cardio' && personalBest.duration) {
       return (
         <div className="mt-2">
-          <div className="text-3xl font-bold text-fitness-600">
+          <div className="text-3xl font-bold text-indigo-600">
             {personalBest.duration} min
           </div>
           <div className="text-sm text-slate-500">
@@ -54,7 +54,7 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
     
     return (
       <div className="mt-2">
-        <div className="text-3xl font-bold text-fitness-600">
+        <div className="text-3xl font-bold text-indigo-600">
           {personalBest.reps} reps
         </div>
         <div className="text-sm text-slate-500">
@@ -65,11 +65,11 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
   };
   
   return (
-    <Card className="elegant-card animate-fade-up">
-      <CardBody>
+    <Card className="animate-fade-up">
+      <CardContent className="pt-6">
         <div className="flex justify-between items-start">
           <div>
-            <Badge themeColor="warning">
+            <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
               <Trophy className="h-3.5 w-3.5 mr-1" />
               Personal Best
             </Badge>
@@ -82,7 +82,7 @@ const PersonalBestCard: React.FC<PersonalBestCardProps> = ({ workouts }) => {
             {formatDate(personalBest.date)}
           </div>
         </div>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

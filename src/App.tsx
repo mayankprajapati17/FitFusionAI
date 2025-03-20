@@ -7,12 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-// Import KendoReact license activation
-import '@progress/kendo-licensing';
-// The import below should be used for activating a license if you have one
-// import { activateLicense } from '@progress/kendo-licensing';
-// activateLicense('your-license-key');
-
 const queryClient = new QueryClient();
 
 const App = () => (
