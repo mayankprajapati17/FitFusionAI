@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Dumbbell, Home, BarChart3, Plus, User } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Button } from '@progress/kendo-react-buttons';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
@@ -11,10 +11,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-sm bg-white/60 border-b border-slate-200/80 animate-fade-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="fitness-container">
         <div className="h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Dumbbell className="h-6 w-6 text-indigo-600" />
+            <Dumbbell className="h-6 w-6 text-fitness-600" />
             <span className="text-xl font-medium tracking-tight">FitTrack</span>
           </div>
           
@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
           <div className="flex items-center gap-4">
             <Button
               onClick={onAddWorkoutClick}
-              className="hidden sm:flex items-center gap-2"
+              className="hidden sm:flex items-center gap-2 k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
             >
               <Plus className="h-4 w-4" />
               Log Workout
@@ -35,8 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
             
             <Button 
               onClick={onAddWorkoutClick}
-              className="sm:hidden p-2 rounded-full"
-              size="icon"
+              className="sm:hidden p-2 rounded-full bg-fitness-600 text-white k-button k-button-md k-button-solid k-button-solid-primary"
             >
               <Plus className="h-5 w-5" />
             </Button>
@@ -61,7 +60,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, icon, children, active }) => {
       className={cn(
         "flex items-center gap-1.5 text-sm font-medium transition-colors py-2",
         active 
-          ? "text-indigo-600" 
+          ? "text-fitness-600" 
           : "text-muted-foreground hover:text-foreground"
       )}
     >

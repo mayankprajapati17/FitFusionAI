@@ -1,9 +1,8 @@
 
 import React from 'react';
+import { TabStrip, TabStripTab } from '@progress/kendo-react-layout';
 import { Activity, Dumbbell, Leaf } from 'lucide-react';
 import { ExerciseType } from '@/types/workout';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 interface CategoryTabsProps {
   activeTab: ExerciseType | 'All';
@@ -29,30 +28,38 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
     { id: 'Flexibility', label: 'Flexibility', icon: <Leaf className="h-4 w-4" /> },
   ];
 
+  const handleSelect = (e: any) => {
+    onTabChange(tabs[e.selected].id as ExerciseType | 'All');
+  };
+  
+  const selected = tabs.findIndex(tab => tab.id === activeTab);
+
   return (
-    <div className="w-full pb-2">
-      <Tabs defaultValue={activeTab} onValueChange={(value) => onTabChange(value as ExerciseType | 'All')}>
-        <TabsList className="w-full justify-start">
-          {tabs.map((tab) => (
-            <TabsTrigger 
-              key={tab.id} 
-              value={tab.id}
-              className={cn(
-                "flex items-center gap-1.5 px-4 py-2",
-                activeTab === tab.id ? "bg-indigo-50 text-indigo-600" : ""
-              )}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-              {workoutCounts[tab.id as keyof typeof workoutCounts] > 0 && (
-                <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
-                  {workoutCounts[tab.id as keyof typeof workoutCounts]}
-                </span>
-              )}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+    <div className="w-full pb-2 elegant-section">
+      <TabStrip
+        selected={selected}
+        onSelect={handleSelect}
+        className="k-fitness-tabs"
+      >
+        {tabs.map((tab) => (
+          <TabStripTab
+            key={tab.id}
+            title={
+              <div className="flex items-center gap-1.5">
+                {tab.icon}
+                <span>{tab.label}</span>
+                {workoutCounts[tab.id as keyof typeof workoutCounts] > 0 && (
+                  <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                    {workoutCounts[tab.id as keyof typeof workoutCounts]}
+                  </span>
+                )}
+              </div>
+            }
+          >
+            {/* Tab content is rendered in the parent component */}
+          </TabStripTab>
+        ))}
+      </TabStrip>
     </div>
   );
 };
