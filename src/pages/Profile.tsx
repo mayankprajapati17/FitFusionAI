@@ -1,18 +1,17 @@
-
-import React, { useState, useEffect } from 'react';
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Edit2, Save } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import Navbar from '@/components/Navbar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import Navbar from '@/components/Navbar';
+import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button as KendoButton } from '@progress/kendo-react-buttons'; // KendoReact Button
+import { Input as KendoInput } from '@progress/kendo-react-inputs'; // KendoReact Input
+import { Card as KendoCard } from '@progress/kendo-react-layout'; // KendoReact Card
+import { Edit2, Save, User } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 // Define the form schema with Zod
 const profileSchema = z.object({
@@ -65,7 +64,6 @@ const Profile = () => {
   }, [form]);
 
   const onSubmit = (data: ProfileFormValues) => {
-    // Save to localStorage
     localStorage.setItem("userProfile", JSON.stringify(data));
     setProfileData(data);
     setIsEditing(false);
@@ -76,7 +74,6 @@ const Profile = () => {
     });
   };
 
-  // Map fitness goal value to display text
   const getFitnessGoalText = (goal: string) => {
     switch (goal) {
       case "weight-loss": return "Weight Loss";
@@ -87,7 +84,6 @@ const Profile = () => {
     }
   };
 
-  // Map gender value to display text
   const getGenderText = (gender: string) => {
     switch (gender) {
       case "male": return "Male";
@@ -107,151 +103,154 @@ const Profile = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
             {isEditing ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+              <KendoCard style={{ padding: '16px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <h2 className="flex items-center gap-2 text-xl font-bold">
                     <User className="h-5 w-5 text-fitness-600" />
                     Edit Profile
-                  </CardTitle>
-                  <CardDescription>
-                    Customize your fitness profile details
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  </h2>
+                  <p className="text-sm text-muted-foreground">Customize your fitness profile details</p>
+                </div>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="fullName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Full Name</FormLabel>
+                          <FormControl>
+                            <KendoInput
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.value)}
+                              placeholder="John Doe"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
-                        name="fullName"
+                        name="age"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full Name</FormLabel>
+                            <FormLabel>Age</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Doe" {...field} />
+                              <KendoInput
+                                value={field.value}
+                                onChange={(e) => field.onChange(e.value)}
+                                type="number"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="age"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Age</FormLabel>
-                              <FormControl>
-                                <Input type="number" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="gender"
-                          render={({ field }) => (
-                            <FormItem className="space-y-3">
-                              <FormLabel>Gender</FormLabel>
-                              <FormControl>
-                                <RadioGroup
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                  className="flex space-x-4"
-                                >
-                                  <FormItem className="flex items-center space-x-2 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="male" />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      Male
-                                    </FormLabel>
-                                  </FormItem>
-                                  <FormItem className="flex items-center space-x-2 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="female" />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      Female
-                                    </FormLabel>
-                                  </FormItem>
-                                  <FormItem className="flex items-center space-x-2 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="other" />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      Other
-                                    </FormLabel>
-                                  </FormItem>
-                                </RadioGroup>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
                       <FormField
                         control={form.control}
-                        name="fitnessGoal"
+                        name="gender"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Fitness Goal</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a fitness goal" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="weight-loss">Weight Loss</SelectItem>
-                                <SelectItem value="muscle-gain">Muscle Gain</SelectItem>
-                                <SelectItem value="endurance">Endurance</SelectItem>
-                                <SelectItem value="general">General Fitness</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="contactNumber"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Number</FormLabel>
+                          <FormItem className="space-y-3">
+                            <FormLabel>Gender</FormLabel>
                             <FormControl>
-                              <Input type="tel" placeholder="+1 234 567 8900" {...field} />
+                              <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex space-x-4"
+                              >
+                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <RadioGroupItem value="male" />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">Male</FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <RadioGroupItem value="female" />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">Female</FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <RadioGroupItem value="other" />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">Other</FormLabel>
+                                </FormItem>
+                              </RadioGroup>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      
-                      <Button type="submit" className="w-full">
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Profile
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
+                    </div>
+                    
+                    <FormField
+                      control={form.control}
+                      name="fitnessGoal"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Fitness Goal</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a fitness goal" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="weight-loss">Weight Loss</SelectItem>
+                              <SelectItem value="muscle-gain">Muscle Gain</SelectItem>
+                              <SelectItem value="endurance">Endurance</SelectItem>
+                              <SelectItem value="general">General Fitness</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="contactNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Number</FormLabel>
+                          <FormControl>
+                            <KendoInput
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.value)}
+                              placeholder="+1 234 567 8900"
+                              type="tel"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <KendoButton type="submit" themeColor="primary" style={{ width: '100%' }}>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Profile
+                    </KendoButton>
+                  </form>
+                </Form>
+              </KendoCard>
             ) : (
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <KendoCard style={{ padding: '16px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                <div className="flex flex-row items-center justify-between pb-2">
                   <div>
-                    <CardTitle className="text-2xl font-bold">Profile Information</CardTitle>
-                    <CardDescription>Your saved fitness profile</CardDescription>
+                    <h2 className="text-2xl font-bold">Profile Information</h2>
+                    <p className="text-sm text-muted-foreground">Your saved fitness profile</p>
                   </div>
-                  <Button variant="outline" onClick={() => setIsEditing(true)}>
+                  <KendoButton onClick={() => setIsEditing(true)}>
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit
-                  </Button>
-                </CardHeader>
-                <CardContent className="pt-6">
+                  </KendoButton>
+                </div>
+                <div className="pt-6">
                   {profileData && (
                     <div className="space-y-4">
                       <div>
@@ -284,37 +283,35 @@ const Profile = () => {
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </KendoCard>
             )}
           </div>
           
           <div className="md:col-span-1">
-            <Card className="bg-accent">
-              <CardHeader>
-                <CardTitle>Profile Summary</CardTitle>
-                <CardDescription>Your fitness profile at a glance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {profileData ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <User className="h-5 w-5 text-fitness-600" />
-                      <span className="text-sm font-medium">{profileData.fullName}</span>
-                    </div>
-                    <div className="text-sm">
-                      <p>Goal: {getFitnessGoalText(profileData.fitnessGoal)}</p>
-                      <p className="mt-1 text-muted-foreground">Profile complete</p>
-                    </div>
+            <KendoCard style={{ padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h2 className="text-xl font-bold">Profile Summary</h2>
+                <p className="text-sm text-muted-foreground">Your fitness profile at a glance</p>
+              </div>
+              {profileData ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <User className="h-5 w-5 text-fitness-600" />
+                    <span className="text-sm font-medium">{profileData.fullName}</span>
                   </div>
-                ) : (
-                  <div className="text-center py-6 text-muted-foreground">
-                    <p>No profile information yet.</p>
-                    <p>Complete your profile to see a summary.</p>
+                  <div className="text-sm">
+                    <p>Goal: {getFitnessGoalText(profileData.fitnessGoal)}</p>
+                    <p className="mt-1 text-muted-foreground">Profile complete</p>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </div>
+              ) : (
+                <div className="text-center py-6 text-muted-foreground">
+                  <p>No profile information yet.</p>
+                  <p>Complete your profile to see a summary.</p>
+                </div>
+              )}
+            </KendoCard>
           </div>
         </div>
       </div>
