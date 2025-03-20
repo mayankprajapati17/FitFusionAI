@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { TabStrip, TabStripTab } from '@progress/kendo-react-layout';
 import { Activity, Dumbbell, Leaf } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExerciseType } from '@/types/workout';
 
 interface CategoryTabsProps {
@@ -28,23 +28,16 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
     { id: 'Flexibility', label: 'Flexibility', icon: <Leaf className="h-4 w-4" /> },
   ];
 
-  const handleSelect = (e: any) => {
-    onTabChange(tabs[e.selected].id as ExerciseType | 'All');
-  };
-  
-  const selected = tabs.findIndex(tab => tab.id === activeTab);
-
   return (
     <div className="w-full pb-2 elegant-section">
-      <TabStrip
-        selected={selected}
-        onSelect={handleSelect}
-        className="k-fitness-tabs"
-      >
-        {tabs.map((tab) => (
-          <TabStripTab
-            key={tab.id}
-            title={
+      <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as ExerciseType | 'All')} className="w-full">
+        <TabsList className="w-full justify-start">
+          {tabs.map((tab) => (
+            <TabsTrigger 
+              key={tab.id} 
+              value={tab.id}
+              className="data-[state=active]:bg-indigo-50 data-[state=active]:text-fitness-600"
+            >
               <div className="flex items-center gap-1.5">
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -54,12 +47,10 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
                   </span>
                 )}
               </div>
-            }
-          >
-            {/* Tab content is rendered in the parent component */}
-          </TabStripTab>
-        ))}
-      </TabStrip>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 };
