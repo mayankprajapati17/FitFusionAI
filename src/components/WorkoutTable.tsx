@@ -1,11 +1,18 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Workout, ExerciseType } from '@/types/workout';
-import { Grid, GridColumn, GridSortChangeEvent } from '@progress/kendo-react-grid';
-import { orderBy, SortDescriptor } from '@progress/kendo-data-query';
 import { MoreVertical } from 'lucide-react';
-import { Button } from '@progress/kendo-react-buttons';
-import { Badge } from '@progress/kendo-react-indicators';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface WorkoutTableProps {
   workouts: Workout[];
@@ -23,103 +30,109 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   
   const getTypeColor = (type: ExerciseType) => {
     switch (type) {
-      case 'Cardio': return 'info';
-      case 'Strength': return 'warning';
-      case 'Flexibility': return 'success';
-      default: return 'primary'; // Changed from 'default' to 'primary' as 'default' is not a valid themeColor
+      case 'Cardio': return 'blue';
+      case 'Strength': return 'yellow';
+      case 'Flexibility': return 'green';
+      default: return 'secondary';
     }
   };
 
-  const formatDate = (props: any) => {
-    const date = new Date(props.dataItem.date);
-    return (
-      <td>
-        {new Intl.DateTimeFormat('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        }).format(date)}
-      </td>
-    );
+  const formatDate = (date: string) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(new Date(date));
   };
 
-  const typeCell = (props: any) => {
-    return (
-      <td>
-        <Badge themeColor={getTypeColor(props.dataItem.exerciseType)}>
-          {props.dataItem.exerciseType}
-        </Badge>
-      </td>
-    );
+  const renderSortIndicator = (column: keyof Workout) => {
+    if (sortColumn !== column) return null;
+    
+    return sortDirection === 'asc' 
+      ? <ChevronUp className="h-4 w-4 ml-1" /> 
+      : <ChevronDown className="h-4 w-4 ml-1" />;
   };
 
-  const repsCell = (props: any) => {
-    const { dataItem } = props;
-    return (
-      <td>
-        {dataItem.exerciseType === 'Strength' && dataItem.sets 
-          ? `${dataItem.reps} × ${dataItem.sets}` 
-          : dataItem.reps}
-      </td>
-    );
+  const handleHeaderClick = (column: keyof Workout) => {
+    onSortChange(column);
   };
-
-  const detailsCell = (props: any) => {
-    const { dataItem } = props;
-    return (
-      <td>
-        {dataItem.weight && `${dataItem.weight}kg`}
-        {dataItem.duration && `${dataItem.duration} min`}
-        {dataItem.notes && dataItem.notes.length > 25
-          ? `${dataItem.notes.substring(0, 25)}...`
-          : dataItem.notes}
-      </td>
-    );
-  };
-
-  const actionsCell = () => {
-    return (
-      <td className="text-right">
-        <Button className="k-button k-button-flat">
-          <MoreVertical className="h-5 w-5" />
-        </Button>
-      </td>
-    );
-  };
-
-  const handleSortChange = (e: GridSortChangeEvent) => {
-    if (e.sort && e.sort.length > 0) {
-      const column = e.sort[0].field as keyof Workout;
-      onSortChange(column);
-    }
-  };
-
-  const sort: Array<SortDescriptor> = [
-    {
-      field: sortColumn,
-      dir: sortDirection
-    }
-  ];
 
   return (
     <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-elegant animate-fade-up">
-      <Grid
-        data={orderBy(workouts, sort)}
-        sortable={{
-          allowUnsort: false,
-          mode: 'single'
-        }}
-        sort={sort}
-        onSortChange={handleSortChange}
-        style={{ height: 'auto' }}
-      >
-        <GridColumn field="date" title="Date" cell={formatDate} />
-        <GridColumn field="exerciseName" title="Exercise" />
-        <GridColumn field="exerciseType" title="Type" cell={typeCell} />
-        <GridColumn field="reps" title="Reps/Sets" cell={repsCell} />
-        <GridColumn field="details" title="Details" cell={detailsCell} />
-        <GridColumn field="actions" title="" cell={actionsCell} width="70px" />
-      </Grid>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead 
+              className="cursor-pointer hover:bg-slate-50" 
+              onClick={() => handleHeaderClick('date')}
+            >
+              <div className="flex items-center">
+                Date
+                {renderSortIndicator('date')}
+              </div>
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-slate-50" 
+              onClick={() => handleHeaderClick('exerciseName')}
+            >
+              <div className="flex items-center">
+                Exercise
+                {renderSortIndicator('exerciseName')}
+              </div>
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-slate-50" 
+              onClick={() => handleHeaderClick('exerciseType')}
+            >
+              <div className="flex items-center">
+                Type
+                {renderSortIndicator('exerciseType')}
+              </div>
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-slate-50" 
+              onClick={() => handleHeaderClick('reps')}
+            >
+              <div className="flex items-center">
+                Reps/Sets
+                {renderSortIndicator('reps')}
+              </div>
+            </TableHead>
+            <TableHead>Details</TableHead>
+            <TableHead className="w-[70px]"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {workouts.map((workout) => (
+            <TableRow key={workout.id}>
+              <TableCell>{formatDate(workout.date)}</TableCell>
+              <TableCell>{workout.exerciseName}</TableCell>
+              <TableCell>
+                <Badge variant={getTypeColor(workout.exerciseType) as any}>
+                  {workout.exerciseType}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                {workout.exerciseType === 'Strength' && workout.sets 
+                  ? `${workout.reps} × ${workout.sets}` 
+                  : workout.reps}
+              </TableCell>
+              <TableCell>
+                {workout.weight && `${workout.weight}kg`}
+                {workout.duration && `${workout.duration} min`}
+                {workout.notes && workout.notes.length > 25
+                  ? `${workout.notes.substring(0, 25)}...`
+                  : workout.notes}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
