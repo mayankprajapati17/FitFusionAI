@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Dumbbell, Heart, Calendar, Brain, ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
@@ -73,116 +72,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Components Demo Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="fitness-container">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold mb-4">Smart Components</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-              Our app uses modern UI components to deliver a seamless experience.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-elegant p-8 max-w-4xl mx-auto">
-            <h3 className="text-xl font-semibold mb-6">Sample Workout Plan</h3>
-            
-            {/* Sample Grid */}
-            <div className="overflow-x-auto mb-8">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-slate-100 text-left">
-                    <th className="py-3 px-4 font-medium text-slate-600">Exercise</th>
-                    <th className="py-3 px-4 font-medium text-slate-600">Sets</th>
-                    <th className="py-3 px-4 font-medium text-slate-600">Reps</th>
-                    <th className="py-3 px-4 font-medium text-slate-600">Complete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-slate-200">
-                    <td className="py-3 px-4">Bench Press</td>
-                    <td className="py-3 px-4">3</td>
-                    <td className="py-3 px-4">10</td>
-                    <td className="py-3 px-4">
-                      <input type="checkbox" className="rounded border-slate-300 text-fitness-600 focus:ring-fitness-500" />
-                    </td>
-                  </tr>
-                  <tr className="border-b border-slate-200">
-                    <td className="py-3 px-4">Squats</td>
-                    <td className="py-3 px-4">4</td>
-                    <td className="py-3 px-4">8</td>
-                    <td className="py-3 px-4">
-                      <input type="checkbox" className="rounded border-slate-300 text-fitness-600 focus:ring-fitness-500" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4">Deadlift</td>
-                    <td className="py-3 px-4">3</td>
-                    <td className="py-3 px-4">5</td>
-                    <td className="py-3 px-4">
-                      <input type="checkbox" className="rounded border-slate-300 text-fitness-600 focus:ring-fitness-500" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-slate-600">Workout Completion</span>
-                <span className="text-sm font-medium">33%</span>
-              </div>
-              <Progress value={33} className="h-2" />
-            </div>
-
-            {/* Dropdown and Button */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <div className="w-full sm:w-auto">
-                <select className="w-full elegant-input">
-                  <option value="">Select Workout Type</option>
-                  <option value="strength">Strength Training</option>
-                  <option value="cardio">Cardio</option>
-                  <option value="flexibility">Flexibility</option>
-                </select>
-              </div>
-              <Button className="w-full sm:w-auto elegant-primary-button">
-                Generate Plan
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Design Section */}
-      <section className="py-20 bg-white">
-        <div className="fitness-container">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold mb-4">Beautiful Design</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-              Our app features a fitness-inspired theme with vibrant colors and intuitive interface.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <DesignCard
-              title="Modern UI Components"
-              description="Sleek, responsive components that provide a seamless user experience."
-              color="bg-gradient-to-br from-fitness-500 to-fitness-700"
-            />
-            <DesignCard
-              title="Fitness-Inspired Theme"
-              description="Vibrant colors and energetic design elements to motivate your fitness journey."
-              color="bg-gradient-to-br from-green-500 to-green-700"
-            />
-            <DesignCard
-              title="Intuitive Navigation"
-              description="Easy-to-use interface that guides you through your fitness planning process."
-              color="bg-gradient-to-br from-orange-500 to-red-500"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Call-to-Action */}
       <section className="py-16 bg-fitness-900 text-white">
         <div className="fitness-container text-center">
@@ -225,26 +114,6 @@ const FeatureCard: React.FC<{
         <CardDescription className="text-base">{description}</CardDescription>
       </CardContent>
     </Card>
-  );
-};
-
-// Design Card Component
-const DesignCard: React.FC<{
-  title: string;
-  description: string;
-  color: string;
-}> = ({ title, description, color }) => {
-  return (
-    <div className={`rounded-2xl p-1 ${color} shadow-elegant hover:shadow-elegant-hover transition-all duration-300`}>
-      <Card className="h-full border-none">
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="text-base">{description}</CardDescription>
-        </CardContent>
-      </Card>
-    </div>
   );
 };
 
