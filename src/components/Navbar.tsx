@@ -1,6 +1,6 @@
 
 import { cn } from '@/lib/utils';
-import { BarChart3, Dumbbell, Home, User, Wand2 } from 'lucide-react';
+import { BarChart3, Dumbbell, Home, User, MessageCircle } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
             <NavLink href="/" icon={<Home className="h-4 w-4" />}>Home</NavLink>
             <NavLink href="/dashboard" icon={<BarChart3 className="h-4 w-4" />}>Dashboard</NavLink>
             <NavLink href="/profile" icon={<User className="h-4 w-4" />}>Profile</NavLink>
-            <NavLink href="#" icon={<Wand2 className="h-4 w-4" />}>Make Your Own Plan</NavLink>
+            <NavLink href="/chatbot" icon={<MessageCircle className="h-4 w-4" />}>AI Chatbot</NavLink>
           </nav>
         </div>
       </div>
