@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { Checkbox } from '@progress/kendo-react-inputs';
 
 interface WorkoutTableProps {
   workouts: Workout[];
@@ -27,6 +28,7 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
   sortColumn,
   sortDirection 
 }) => {
+  const [selectedWorkouts, setSelectedWorkouts] = useState<{[key: string]: boolean}>({});
   
   const getTypeColor = (type: ExerciseType) => {
     switch (type) {
@@ -57,11 +59,19 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
     onSortChange(column);
   };
 
+  const handleCheckboxChange = (workoutId: string) => {
+    setSelectedWorkouts(prev => ({
+      ...prev,
+      [workoutId]: !prev[workoutId]
+    }));
+  };
+
   return (
     <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-elegant animate-fade-up">
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[50px]">Select</TableHead>
             <TableHead 
               className="cursor-pointer hover:bg-slate-50" 
               onClick={() => handleHeaderClick('date')}
@@ -105,6 +115,13 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
         <TableBody>
           {workouts.map((workout) => (
             <TableRow key={workout.id}>
+              <TableCell>
+                <Checkbox
+                  checked={!!selectedWorkouts[workout.id]}
+                  onChange={() => handleCheckboxChange(workout.id)}
+                  label=""
+                />
+              </TableCell>
               <TableCell>{formatDate(workout.date)}</TableCell>
               <TableCell>{workout.exerciseName}</TableCell>
               <TableCell>
