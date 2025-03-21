@@ -1,19 +1,34 @@
 import Navbar from '@/components/Navbar';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Form, FormControl, FormField, FormItem, FormMessage
+} from "@/components/ui/form";
+import {
+  RadioGroup, RadioGroupItem
+} from "@/components/ui/radio-group";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button as KendoButton } from '@progress/kendo-react-buttons'; // KendoReact Button
-import { Input as KendoInput } from '@progress/kendo-react-inputs'; // KendoReact Input
-import { Card as KendoCard } from '@progress/kendo-react-layout'; // KendoReact Card
+import {
+  Button as KendoButton
+} from '@progress/kendo-react-buttons';
+import {
+  Input as KendoInput
+} from '@progress/kendo-react-inputs';
+import { FloatingLabel } from '@progress/kendo-react-labels';
+import {
+  Card as KendoCard
+} from '@progress/kendo-react-layout';
+
 import { Edit2, Save, User } from "lucide-react";
 import { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// Define the form schema with Zod
+
 const profileSchema = z.object({
   fullName: z.string().min(2, { message: "Name must be at least 2 characters" }),
   age: z.string().refine((val) => {
@@ -35,7 +50,6 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<ProfileFormValues | null>(null);
 
-  // Initialize the form
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -47,7 +61,6 @@ const Profile = () => {
     },
   });
 
-  // Load profile data from localStorage on component mount
   useEffect(() => {
     const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
@@ -59,7 +72,7 @@ const Profile = () => {
         console.error("Error parsing profile data:", error);
       }
     } else {
-      setIsEditing(true); // If no profile exists, go straight to edit mode
+      setIsEditing(true);
     }
   }, [form]);
 
@@ -67,7 +80,7 @@ const Profile = () => {
     localStorage.setItem("userProfile", JSON.stringify(data));
     setProfileData(data);
     setIsEditing(false);
-    
+
     toast({
       title: "Profile saved",
       description: "Your profile information has been updated.",
@@ -95,91 +108,102 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar onAddWorkoutClick={() => {}} />
-      
-      <div className="fitness-container py-8">
-        <h1 className="text-3xl font-bold mb-6 fade-up">Your Profile</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2">
+      <Navbar onAddWorkoutClick={() => { }} />
+
+      <div className="fitness-container py-8 px-4 md:px-12">
+        <h1 className="text-3xl font-bold mb-8 text-gray-800 animate-fade-up">Your Profile</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* LEFT SECTION */}
+          <div className="md:col-span-2 space-y-6">
             {isEditing ? (
-              <KendoCard style={{ padding: '16px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                <div style={{ marginBottom: '16px' }}>
-                  <h2 className="flex items-center gap-2 text-xl font-bold">
-                    <User className="h-5 w-5 text-fitness-600" />
+              <KendoCard
+                style={{
+                  padding: '24px',
+                  borderRadius: '16px',
+                  boxShadow: '0 6px 12px rgba(0,0,0,0.08)',
+                  backgroundColor: '#ffffff'
+                }}
+              >
+                <div className="mb-6">
+                  <h2 className="flex items-center gap-2 text-2xl font-semibold text-gray-800">
+                    <User className="h-5 w-5 text-blue-500" />
                     Edit Profile
                   </h2>
-                  <p className="text-sm text-muted-foreground">Customize your fitness profile details</p>
+                  <p className="text-sm text-gray-500">Customize your fitness profile details</p>
                 </div>
+
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    {/* Full Name */}
                     <FormField
                       control={form.control}
                       name="fullName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
                           <FormControl>
-                            <KendoInput
-                              value={field.value}
-                              onChange={(e) => field.onChange(e.value)}
-                              placeholder="John Doe"
-                            />
+                            <FloatingLabel
+                              label="Full Name"
+                              editorId="fullName"
+                              editorValue={field.value}
+                            >
+                              <KendoInput
+                                value={field.value}
+                                onChange={(e) => field.onChange(e.value)}
+                                placeholder="John Doe"
+                              />
+                            </FloatingLabel>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Age */}
                       <FormField
                         control={form.control}
                         name="age"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Age</FormLabel>
                             <FormControl>
-                              <KendoInput
-                                value={field.value}
-                                onChange={(e) => field.onChange(e.value)}
-                                type="number"
-                              />
+                              <FloatingLabel
+                                label="Age"
+                                editorId="age"
+                                editorValue={field.value}
+                              >
+                                <KendoInput
+                                  value={field.value}
+                                  onChange={(e) => field.onChange(e.value)}
+                                  type="number"
+                                />
+                              </FloatingLabel>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      
+
+                      {/* Gender */}
                       <FormField
                         control={form.control}
                         name="gender"
                         render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel>Gender</FormLabel>
+                          <FormItem className="space-y-2">
                             <FormControl>
                               <RadioGroup
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
                                 className="flex space-x-4"
                               >
-                                <FormItem className="flex items-center space-x-2 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="male" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">Male</FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-2 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="female" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">Female</FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-2 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="other" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">Other</FormLabel>
-                                </FormItem>
+                                {["male", "female", "other"].map((option) => (
+                                  <FormItem key={option} className="flex items-center space-x-2">
+                                    <FormControl>
+                                      <RadioGroupItem value={option} />
+                                    </FormControl>
+                                    <label className="text-sm font-medium capitalize text-gray-700">{option}</label>
+                                  </FormItem>
+                                ))}
                               </RadioGroup>
                             </FormControl>
                             <FormMessage />
@@ -187,16 +211,16 @@ const Profile = () => {
                         )}
                       />
                     </div>
-                    
+
+                    {/* Fitness Goal */}
                     <FormField
                       control={form.control}
                       name="fitnessGoal"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Fitness Goal</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="hover:border-blue-400 transition">
                                 <SelectValue placeholder="Select a fitness goal" />
                               </SelectTrigger>
                             </FormControl>
@@ -211,27 +235,44 @@ const Profile = () => {
                         </FormItem>
                       )}
                     />
-                    
+
+                    {/* Contact Number */}
                     <FormField
                       control={form.control}
                       name="contactNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Contact Number</FormLabel>
                           <FormControl>
-                            <KendoInput
-                              value={field.value}
-                              onChange={(e) => field.onChange(e.value)}
-                              placeholder="+1 234 567 8900"
-                              type="tel"
-                            />
+                            <FloatingLabel
+                              label="Contact Number"
+                              editorId="contactNumber"
+                              editorValue={field.value}
+                            >
+                              <KendoInput
+                                value={field.value}
+                                onChange={(e) => field.onChange(e.value)}
+                                placeholder="+1 234 567 8900"
+                                type="tel"
+                              />
+                            </FloatingLabel>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    
-                    <KendoButton type="submit" themeColor="primary" style={{ width: '100%' }}>
+
+                    {/* Save Button */}
+                    <KendoButton
+                      type="submit"
+                      themeColor="primary"
+                      style={{
+                        width: '100%',
+                        borderRadius: '8px',
+                        fontWeight: '600',
+                        transition: 'all 0.3s',
+                      }}
+                      className="hover:scale-105"
+                    >
                       <Save className="mr-2 h-4 w-4" />
                       Save Profile
                     </KendoButton>
@@ -239,76 +280,94 @@ const Profile = () => {
                 </Form>
               </KendoCard>
             ) : (
-              <KendoCard style={{ padding: '16px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                <div className="flex flex-row items-center justify-between pb-2">
+              <KendoCard
+                style={{
+                  padding: '24px',
+                  borderRadius: '16px',
+                  boxShadow: '0 6px 12px rgba(0,0,0,0.08)',
+                  backgroundColor: '#ffffff'
+                }}
+              >
+                <div className="flex flex-row items-center justify-between pb-4">
                   <div>
-                    <h2 className="text-2xl font-bold">Profile Information</h2>
-                    <p className="text-sm text-muted-foreground">Your saved fitness profile</p>
+                    <h2 className="text-2xl font-semibold text-gray-800">Profile Information</h2>
+                    <p className="text-sm text-gray-500">Your saved fitness profile</p>
                   </div>
-                  <KendoButton onClick={() => setIsEditing(true)}>
+                  <KendoButton
+                    onClick={() => setIsEditing(true)}
+                    themeColor="primary"
+                    className="hover:scale-105"
+                  >
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit
                   </KendoButton>
                 </div>
-                <div className="pt-6">
+
+                <div className="pt-4 space-y-4 text-gray-700">
                   {profileData && (
-                    <div className="space-y-4">
+                    <>
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground">Full Name</h3>
-                        <p className="text-lg font-medium">{profileData.fullName}</p>
+                        <h3 className="text-sm font-medium text-gray-500">Full Name</h3>
+                        <p className="text-lg font-semibold">{profileData.fullName}</p>
                       </div>
                       <Separator />
-                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h3 className="text-sm font-medium text-muted-foreground">Age</h3>
-                          <p className="text-lg font-medium">{profileData.age}</p>
+                          <h3 className="text-sm font-medium text-gray-500">Age</h3>
+                          <p className="text-lg font-semibold">{profileData.age}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-muted-foreground">Gender</h3>
-                          <p className="text-lg font-medium">{getGenderText(profileData.gender)}</p>
+                          <h3 className="text-sm font-medium text-gray-500">Gender</h3>
+                          <p className="text-lg font-semibold">{getGenderText(profileData.gender)}</p>
                         </div>
                       </div>
                       <Separator />
-                      
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground">Fitness Goal</h3>
-                        <p className="text-lg font-medium">{getFitnessGoalText(profileData.fitnessGoal)}</p>
+                        <h3 className="text-sm font-medium text-gray-500">Fitness Goal</h3>
+                        <p className="text-lg font-semibold">{getFitnessGoalText(profileData.fitnessGoal)}</p>
                       </div>
                       <Separator />
-                      
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground">Contact Number</h3>
-                        <p className="text-lg font-medium">{profileData.contactNumber}</p>
+                        <h3 className="text-sm font-medium text-gray-500">Contact Number</h3>
+                        <p className="text-lg font-semibold">{profileData.contactNumber}</p>
                       </div>
-                    </div>
+                    </>
                   )}
                 </div>
               </KendoCard>
             )}
           </div>
-          
+
+          {/* RIGHT SECTION */}
           <div className="md:col-span-1">
-            <KendoCard style={{ padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-              <div style={{ marginBottom: '16px' }}>
-                <h2 className="text-xl font-bold">Profile Summary</h2>
-                <p className="text-sm text-muted-foreground">Your fitness profile at a glance</p>
+            <KendoCard
+              style={{
+                padding: '24px',
+                backgroundColor: '#f1f5f9',
+                borderRadius: '16px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+              }}
+            >
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Profile Summary</h2>
+                <p className="text-sm text-gray-500">Your fitness profile at a glance</p>
               </div>
+
               {profileData ? (
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-fitness-600" />
-                    <span className="text-sm font-medium">{profileData.fullName}</span>
+                  <div className="flex items-center gap-3">
+                    <User className="h-5 w-5 text-blue-500" />
+                    <span className="text-sm font-medium text-gray-700">{profileData.fullName}</span>
                   </div>
-                  <div className="text-sm">
-                    <p>Goal: {getFitnessGoalText(profileData.fitnessGoal)}</p>
-                    <p className="mt-1 text-muted-foreground">Profile complete</p>
+                  <div className="text-sm text-gray-600">
+                    <p>Goal: <strong>{getFitnessGoalText(profileData.fitnessGoal)}</strong></p>
+                    <p className="mt-1 text-green-600 font-medium">Profile complete</p>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-6 text-muted-foreground">
+                <div className="text-center py-8 text-gray-500">
                   <p>No profile information yet.</p>
-                  <p>Complete your profile to see a summary.</p>
+                  <p className="mt-1">Complete your profile to see a summary.</p>
                 </div>
               )}
             </KendoCard>
