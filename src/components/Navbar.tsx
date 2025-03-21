@@ -15,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
         <div className="h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Dumbbell className="h-6 w-6 text-fitness-600" />
-            <span className="text-xl font-medium tracking-tight">FitTrack</span>
+            <span className="text-xl font-medium tracking-tight">FitFusion AI</span>
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
