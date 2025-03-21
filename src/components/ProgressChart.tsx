@@ -5,8 +5,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Workout } from '@/types/workout';
-import { calculateWeeklyProgress } from '@/utils/mockData';
-import { ProgressBar } from '@progress/kendo-react-progressbars'; // KendoReact ProgressBars
+import { ProgressBar } from '@progress/kendo-react-progressbars';
 import React, { useState, useEffect } from 'react';
 import {
   Bar,
@@ -25,8 +24,7 @@ interface ProgressChartProps {
 const ProgressChart: React.FC<ProgressChartProps> = ({ workouts, completedWorkouts = {} }) => {
   const [progressValue, setProgressValue] = useState<number>(0);
   const categories = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const chunkCount = 7; // One chunk per day of the week
-
+  
   useEffect(() => {
     // Calculate progress based on completed workouts
     if (!workouts.length) {
@@ -41,12 +39,15 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts, completedWorkou
     setProgressValue(calculatedProgress);
   }, [workouts, completedWorkouts]);
 
-  // Generate chart data for the bar chart
+  // Generate chart data for the bar chart, with last day reflecting actual progress
   const chartData = categories.map((day, index) => {
-    const values = [20, 40, 45, 30, 50, 60, progressValue]; // Placeholder values for days, keep last day as our calculated progress
+    // Create a distribution that mimics weekly progress leading up to today's value
+    const baseValues = [15, 25, 35, 45, 60, 75, progressValue]; 
+    const value = index === 6 ? progressValue : baseValues[index];
+    
     return {
       name: day,
-      value: values[index],
+      value: value,
     };
   });
 
@@ -57,24 +58,11 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts, completedWorkou
       {/* KendoReact ProgressBar Section */}
       <div className="flex items-center gap-4 mb-3">
         <div className="flex-1">
-          {/* Standard ProgressBar */}
           <ProgressBar
             value={progressValue}
             max={100}
-            style={{ height: '8px' }} // Matches original h-2 (~8px)
+            style={{ height: '8px' }}
           />
-          {/* Optional ChunkProgressBar */}
-          {/* Uncomment the following block to include ChunkProgressBar */}
-          {/*
-          <div className="mt-2">
-            <ChunkProgressBar
-              value={progressValue}
-              max={100}
-              chunkCount={chunkCount}
-              style={{ height: '8px' }}
-            />
-          </div>
-          */}
           <div className="flex justify-between mt-2 text-xs text-slate-500">
             <span>0%</span>
             <span>50%</span>
@@ -105,7 +93,7 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts, completedWorkou
               <ChartTooltip
                 content={<ChartTooltipContent formatter={(value) => [`${value}%`, 'Progress']} />}
               />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={20}>
+              <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={22}>
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={index === 6 ? '#4338ca' : '#818cf8'} />
                 ))}

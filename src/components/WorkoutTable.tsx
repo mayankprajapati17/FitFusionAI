@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Workout, ExerciseType } from '@/types/workout';
-import { MoreVertical } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -117,7 +116,6 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
               </div>
             </TableHead>
             <TableHead>Details</TableHead>
-            <TableHead className="w-[70px]"></TableHead>
             <TableHead className="w-[90px] text-center">Status</TableHead>
           </TableRow>
         </TableHeader>
@@ -142,11 +140,6 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
                 {workout.notes && workout.notes.length > 25
                   ? `${workout.notes.substring(0, 25)}...`
                   : workout.notes}
-              </TableCell>
-              <TableCell className="text-right">
-                <Button variant="ghost" size="icon">
-                  <MoreVertical className="h-5 w-5" />
-                </Button>
               </TableCell>
               <TableCell className="text-center">
                 <Checkbox
