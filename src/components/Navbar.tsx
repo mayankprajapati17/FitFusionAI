@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import { BarChart3, Dumbbell, Home, User, Wand2 } from 'lucide-react';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavbarProps {
   onAddWorkoutClick: () => void;
@@ -19,8 +19,8 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <NavLink href="/" icon={<Home className="h-4 w-4" />}>Dashboard</NavLink>
-            <NavLink href="#" icon={<BarChart3 className="h-4 w-4" />}>Stats</NavLink>
+            <NavLink href="/" icon={<Home className="h-4 w-4" />}>Home</NavLink>
+            <NavLink href="/dashboard" icon={<BarChart3 className="h-4 w-4" />}>Dashboard</NavLink>
             <NavLink href="/profile" icon={<User className="h-4 w-4" />}>Profile</NavLink>
             <NavLink href="#" icon={<Wand2 className="h-4 w-4" />}>Make Your Own Plan</NavLink>
           </nav>
@@ -38,7 +38,8 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ href, icon, children, active }) => {
-  const isCurrentPage = window.location.pathname === href;
+  const location = useLocation();
+  const isCurrentPage = location.pathname === href;
   
   return (
     <Link
