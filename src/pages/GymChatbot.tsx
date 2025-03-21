@@ -1,14 +1,15 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Fade } from '@progress/kendo-react-animation';
-import { Loader } from '@progress/kendo-react-indicators';
-import { TextBox } from '@progress/kendo-react-inputs';
+import { Loader } from '@progress/kendo-react-indicators'; // Import KendoReact Loader
 import { Dumbbell, HelpCircle, RefreshCw, Send } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+// Message type definition
 type Message = {
   id: string;
   text: string;
@@ -16,6 +17,7 @@ type Message = {
   timestamp: Date;
 };
 
+// Pre-defined responses for common fitness questions
 const fitnessResponses: Record<string, string> = {
   workout: "For beginners, start with 2-3 full-body workouts per week. Include basic compound exercises like squats, push-ups, and rows. Aim for 2-3 sets of 8-12 reps with proper form. Rest 1-2 minutes between sets and take a day off between workouts.",
   nutrition: "A balanced diet for fitness should include lean proteins (chicken, fish, tofu), complex carbs (brown rice, sweet potatoes), healthy fats (avocado, nuts), and plenty of fruits and vegetables. Aim to eat every 3-4 hours and stay hydrated.",
@@ -33,6 +35,7 @@ const fitnessResponses: Record<string, string> = {
   "diet for weight loss": "For weight loss, create a moderate calorie deficit (300-500 calories/day), emphasize protein (1.6-2.2g/kg bodyweight), eat plenty of fiber-rich vegetables, stay hydrated, limit processed foods and added sugars, practice portion control, and consider meal timing around workouts.",
 };
 
+// Common workout questions for suggestions
 const suggestedQuestions = [
   "How can I lose belly fat?",
   "What's the best workout plan for muscle gain?",
@@ -54,6 +57,7 @@ const GymChatbot: React.FC = () => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
@@ -63,15 +67,18 @@ const GymChatbot: React.FC = () => {
     }
   }, [messages]);
 
+  // Generate response based on user input
   const generateResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
     
+    // Check for keywords in the input
     for (const [keyword, response] of Object.entries(fitnessResponses)) {
       if (input.includes(keyword)) {
         return response;
       }
     }
     
+    // Default responses if no keyword matches
     if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
       return "Hello! How can I help with your fitness journey today?";
     }
@@ -80,12 +87,15 @@ const GymChatbot: React.FC = () => {
       return "You're welcome! Feel free to ask if you have any other fitness questions.";
     }
     
+    // Fallback response
     return "I'm here to help with fitness questions about workouts, nutrition, strength training, cardio, stretching, rest, motivation, weight management, muscle building, and injury prevention. Could you provide more details about what you'd like to know?";
   };
 
+  // Send a message and get response
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
     
+    // Add user message to chat
     const userMessage: Message = {
       id: Date.now().toString(),
       text: inputValue,
@@ -98,8 +108,10 @@ const GymChatbot: React.FC = () => {
     setIsLoading(true);
     
     try {
+      // Generate response based on keywords instead of API
       const responseText = generateResponse(userMessage.text);
       
+      // Simulate network delay for a more natural feel
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const aiResponse: Message = {
@@ -119,6 +131,7 @@ const GymChatbot: React.FC = () => {
         variant: "destructive"
       });
       
+      // Add error message
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: "Sorry, I couldn't process your request. Please try again.",
@@ -132,10 +145,12 @@ const GymChatbot: React.FC = () => {
     }
   };
 
+  // Handle suggestion click
   const handleSuggestionClick = (question: string) => {
     setInputValue(question);
   };
 
+  // Clear the chat history
   const handleClearChat = () => {
     setMessages([
       {
@@ -147,6 +162,7 @@ const GymChatbot: React.FC = () => {
     ]);
   };
 
+  // Handle Enter key press
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSendMessage();
@@ -211,6 +227,7 @@ const GymChatbot: React.FC = () => {
               </div>
             </ScrollArea>
             
+            {/* Suggestions */}
             <div className="px-4 py-3 border-t border-slate-200 bg-slate-50">
               <div className="flex items-center mb-2">
                 <HelpCircle className="h-4 w-4 mr-2 text-slate-500" />
@@ -232,14 +249,13 @@ const GymChatbot: React.FC = () => {
             </div>
             
             <div className="p-4 border-t border-slate-200 flex gap-2">
-              <TextBox
+              <Input
                 placeholder="Ask about workouts, nutrition, or fitness tips..."
                 value={inputValue}
-                onChange={(e) => setInputValue(e.value)}
+                onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
                 className="flex-1"
                 disabled={isLoading}
-                rounded="medium"
               />
               <Button 
                 onClick={handleSendMessage} 
