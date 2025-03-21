@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
+import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dumbbell, Send, RefreshCw, HelpCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import Navbar from '@/components/Navbar';
 import { Fade } from '@progress/kendo-react-animation';
+import { Loader } from '@progress/kendo-react-indicators'; // Import KendoReact Loader
+import { Dumbbell, HelpCircle, RefreshCw, Send } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Message type definition
 type Message = {
@@ -217,12 +218,8 @@ const GymChatbot: React.FC = () => {
                 {isLoading && (
                   <Fade>
                     <div className="flex justify-start">
-                      <div className="bg-slate-200 text-slate-800 rounded-2xl rounded-tl-none px-4 py-2 max-w-[80%]">
-                        <div className="flex gap-1 items-center">
-                          <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                          <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
-                          <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
-                        </div>
+                      <div className="bg-slate-200 text-slate-800 rounded-2xl rounded-tl-none px-4 py-2 max-w-[80%] flex items-center">
+                        <Loader type="converging-spinner" size="medium" />
                       </div>
                     </div>
                   </Fade>
