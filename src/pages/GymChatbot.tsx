@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dumbbell, Send, RefreshCw } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 
 // Message type definition
@@ -15,14 +16,7 @@ type Message = {
   timestamp: Date;
 };
 
-// Mock responses for demonstration
-const mockResponses: Record<string, string> = {
-  workout: "Try this beginner workout: 3 sets of 10 push-ups, 15 squats, and a 20-second plank. Rest 60 seconds between sets.",
-  protein: "Aim for 0.8-1.2g of protein per kg of body weight daily, depending on your fitness goals. If you're building muscle, lean toward the higher end.",
-  cardio: "For effective cardio, aim for 150 minutes of moderate activity or 75 minutes of vigorous activity per week. Mix in HIIT for optimal results.",
-  rest: "Rest days are crucial! Aim for 1-2 rest days per week. Active recovery like walking or yoga can help on these days.",
-  default: "That's a great gym-related question. To build a balanced fitness routine, combine strength training, cardio, and proper nutrition based on your specific goals."
-};
+const GEMINI_API_KEY = "AIzaSyBTV-oy6cxsFjFbN-1NJPD2lWTnBrUj-Ok";
 
 const GymChatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -36,6 +30,7 @@ const GymChatbot: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -47,20 +42,49 @@ const GymChatbot: React.FC = () => {
     }
   }, [messages]);
 
-  // Helper to generate mock response based on keywords
-  const getMockResponse = (question: string) => {
-    const lowerQuestion = question.toLowerCase();
+  // Gemini API call
+  const fetchGeminiResponse = async (prompt: string) => {
+    const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
     
-    if (lowerQuestion.includes('workout') || lowerQuestion.includes('exercise') || lowerQuestion.includes('training')) {
-      return mockResponses.workout;
-    } else if (lowerQuestion.includes('protein') || lowerQuestion.includes('nutrition') || lowerQuestion.includes('diet')) {
-      return mockResponses.protein;
-    } else if (lowerQuestion.includes('cardio') || lowerQuestion.includes('running') || lowerQuestion.includes('heart')) {
-      return mockResponses.cardio;
-    } else if (lowerQuestion.includes('rest') || lowerQuestion.includes('recovery') || lowerQuestion.includes('sleep')) {
-      return mockResponses.rest;
-    } else {
-      return mockResponses.default;
+    try {
+      const response = await fetch(`${apiUrl}?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `You are a knowledgeable fitness assistant. Answer this gym-related question concisely and with helpful information: ${prompt}`
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500,
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Gemini API error:', errorData);
+        throw new Error(`Gemini API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+        return data.candidates[0].content.parts[0].text;
+      } else {
+        throw new Error("Unexpected API response format");
+      }
+    } catch (error) {
+      console.error('Error calling Gemini API:', error);
+      throw error;
     }
   };
 
@@ -81,48 +105,25 @@ const GymChatbot: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // In a real implementation, you would call the Gemini API here
-      // For now, we'll use a timeout to simulate API call and use mock responses
-      setTimeout(() => {
-        const responseText = getMockResponse(userMessage.text);
-        
-        const aiResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          text: responseText,
-          sender: 'ai',
-          timestamp: new Date(),
-        };
-        
-        setMessages(prev => [...prev, aiResponse]);
-        setIsLoading(false);
-      }, 1000);
+      // Call the Gemini API
+      const responseText = await fetchGeminiResponse(userMessage.text);
       
-      // Real API implementation would look something like this:
-      /*
-      const response = await fetch('https://api.gemini.com/v1/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer YOUR_API_KEY_HERE`
-        },
-        body: JSON.stringify({
-          prompt: `Answer this gym-related question: ${userMessage.text}`,
-          max_tokens: 150
-        })
-      });
-      
-      const data = await response.json();
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.choices[0].text,
+        text: responseText,
         sender: 'ai',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, aiResponse]);
-      */
     } catch (error) {
       console.error('Error getting response:', error);
+      
+      toast({
+        title: "Error",
+        description: "Sorry, couldn't connect to the AI assistant. Please try again.",
+        variant: "destructive"
+      });
       
       // Add error message
       const errorMessage: Message = {
