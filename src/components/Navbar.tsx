@@ -1,6 +1,6 @@
+
 import { cn } from '@/lib/utils';
-import { Button as KendoButton } from '@progress/kendo-react-buttons'; // KendoReact Button
-import { BarChart3, Dumbbell, Home, Plus, User, Wand2 } from 'lucide-react';
+import { BarChart3, Dumbbell, Home, User, Wand2 } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -24,26 +24,6 @@ const Navbar: React.FC<NavbarProps> = ({ onAddWorkoutClick }) => {
             <NavLink href="/profile" icon={<User className="h-4 w-4" />}>Profile</NavLink>
             <NavLink href="#" icon={<Wand2 className="h-4 w-4" />}>Make Your Own Plan</NavLink>
           </nav>
-          
-          <div className="flex items-center gap-4">
-            <KendoButton
-              onClick={onAddWorkoutClick}
-              className="hidden sm:flex items-center gap-2"
-              themeColor="primary"
-            >
-              <Plus className="h-4 w-4" />
-              Log Workout
-            </KendoButton>
-            
-            <KendoButton
-              onClick={onAddWorkoutClick}
-              fillMode="outline"
-              className="sm:hidden"
-              style={{ width: '40px', height: '40px' }} // Matches size="icon"
-            >
-              <Plus className="h-5 w-5" />
-            </KendoButton>
-          </div>
         </div>
       </div>
     </header>

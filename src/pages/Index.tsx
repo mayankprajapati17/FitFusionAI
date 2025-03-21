@@ -1,12 +1,15 @@
+
 import CategoryTabs from '@/components/CategoryTabs';
 import Navbar from '@/components/Navbar';
 import PersonalBestCard from '@/components/PersonalBestCard';
 import ProgressChart from '@/components/ProgressChart';
+import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import WorkoutForm from '@/components/WorkoutForm';
 import WorkoutTable from '@/components/WorkoutTable';
 import { ExerciseType, Workout, WorkoutFormData } from '@/types/workout';
 import { filterWorkoutsByType, generateMockWorkouts } from '@/utils/mockData';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -111,7 +114,17 @@ const Index = () => {
           </div>
 
           <div className="w-full lg:w-1/4 space-y-6 mt-6 lg:mt-0">
-            <ProgressChart workouts={workouts} />
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mb-4 lg:mb-0">
+              <Button 
+                onClick={() => setIsFormOpen(true)} 
+                className="bg-red-500 hover:bg-red-600 flex items-center gap-2 text-white"
+              >
+                <Plus className="h-4 w-4" />
+                Log Workout
+              </Button>
+              
+              <ProgressChart workouts={workouts} />
+            </div>
             <PersonalBestCard workouts={workouts} />
           </div>
         </div>
