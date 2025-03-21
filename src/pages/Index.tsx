@@ -20,6 +20,7 @@ const Index = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [sortColumn, setSortColumn] = useState<keyof Workout>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [completedWorkouts, setCompletedWorkouts] = useState<{[key: string]: boolean}>({});
 
   // Load mock data
   useEffect(() => {
@@ -82,6 +83,10 @@ const Index = () => {
     }
   };
 
+  const handleWorkoutStatusChange = (updatedWorkouts: {[key: string]: boolean}) => {
+    setCompletedWorkouts(updatedWorkouts);
+  };
+
   // Count workouts by type
   const workoutCounts = {
     All: workouts.length,
@@ -110,6 +115,7 @@ const Index = () => {
               onSortChange={handleSortChange}
               sortColumn={sortColumn}
               sortDirection={sortDirection}
+              onWorkoutStatusChange={handleWorkoutStatusChange}
             />
           </div>
 
@@ -123,7 +129,7 @@ const Index = () => {
                 Log Workout
               </Button>
               
-              <ProgressChart workouts={workouts} />
+              <ProgressChart workouts={workouts} completedWorkouts={completedWorkouts} />
             </div>
             <PersonalBestCard workouts={workouts} />
           </div>

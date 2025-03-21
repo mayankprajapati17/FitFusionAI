@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Workout, ExerciseType } from '@/types/workout';
 import { MoreVertical } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
@@ -20,16 +20,25 @@ interface WorkoutTableProps {
   onSortChange: (column: keyof Workout) => void;
   sortColumn: keyof Workout;
   sortDirection: 'asc' | 'desc';
+  onWorkoutStatusChange?: (completedWorkouts: {[key: string]: boolean}) => void;
 }
 
 const WorkoutTable: React.FC<WorkoutTableProps> = ({ 
   workouts, 
   onSortChange,
   sortColumn,
-  sortDirection 
+  sortDirection,
+  onWorkoutStatusChange
 }) => {
   const [selectedWorkouts, setSelectedWorkouts] = useState<{[key: string]: boolean}>({});
   
+  useEffect(() => {
+    // Call the callback whenever selected workouts change
+    if (onWorkoutStatusChange) {
+      onWorkoutStatusChange(selectedWorkouts);
+    }
+  }, [selectedWorkouts, onWorkoutStatusChange]);
+
   const getTypeColor = (type: ExerciseType) => {
     switch (type) {
       case 'Cardio': return 'blue';
@@ -71,7 +80,6 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">Select</TableHead>
             <TableHead 
               className="cursor-pointer hover:bg-slate-50" 
               onClick={() => handleHeaderClick('date')}
@@ -110,18 +118,12 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
             </TableHead>
             <TableHead>Details</TableHead>
             <TableHead className="w-[70px]"></TableHead>
+            <TableHead className="w-[90px] text-center">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {workouts.map((workout) => (
             <TableRow key={workout.id}>
-              <TableCell>
-                <Checkbox
-                  checked={!!selectedWorkouts[workout.id]}
-                  onChange={() => handleCheckboxChange(workout.id)}
-                  label=""
-                />
-              </TableCell>
               <TableCell>{formatDate(workout.date)}</TableCell>
               <TableCell>{workout.exerciseName}</TableCell>
               <TableCell>
@@ -145,6 +147,13 @@ const WorkoutTable: React.FC<WorkoutTableProps> = ({
                 <Button variant="ghost" size="icon">
                   <MoreVertical className="h-5 w-5" />
                 </Button>
+              </TableCell>
+              <TableCell className="text-center">
+                <Checkbox
+                  checked={!!selectedWorkouts[workout.id]}
+                  onChange={() => handleCheckboxChange(workout.id)}
+                  label=""
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -1,3 +1,4 @@
+
 import {
   ChartContainer,
   ChartTooltip,
@@ -6,7 +7,7 @@ import {
 import { Workout } from '@/types/workout';
 import { calculateWeeklyProgress } from '@/utils/mockData';
 import { ProgressBar } from '@progress/kendo-react-progressbars'; // KendoReact ProgressBars
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bar,
   BarChart,
@@ -18,16 +19,31 @@ import {
 
 interface ProgressChartProps {
   workouts: Workout[];
+  completedWorkouts?: {[key: string]: boolean};
 }
 
-const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
-  const progressValue = calculateWeeklyProgress(workouts); // Progress value (0-100)
+const ProgressChart: React.FC<ProgressChartProps> = ({ workouts, completedWorkouts = {} }) => {
+  const [progressValue, setProgressValue] = useState<number>(0);
   const categories = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const chunkCount = 7; // One chunk per day of the week
 
+  useEffect(() => {
+    // Calculate progress based on completed workouts
+    if (!workouts.length) {
+      setProgressValue(0);
+      return;
+    }
+
+    const completedCount = Object.values(completedWorkouts).filter(value => value).length;
+    const totalWorkouts = workouts.length;
+    const calculatedProgress = Math.round((completedCount / totalWorkouts) * 100);
+    
+    setProgressValue(calculatedProgress);
+  }, [workouts, completedWorkouts]);
+
   // Generate chart data for the bar chart
   const chartData = categories.map((day, index) => {
-    const values = [20, 40, 45, 30, 50, 60, progressValue]; // Placeholder values
+    const values = [20, 40, 45, 30, 50, 60, progressValue]; // Placeholder values for days, keep last day as our calculated progress
     return {
       name: day,
       value: values[index],
@@ -100,7 +116,9 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ workouts }) => {
       </div>
 
       {/* Additional Info */}
-      <p className="text-xs text-slate-500 mt-3">Goal: 1,000 reps this week</p>
+      <p className="text-xs text-slate-500 mt-3">
+        Goal: {Object.values(completedWorkouts).filter(v => v).length} / {workouts.length} workouts completed
+      </p>
     </div>
   );
 };
