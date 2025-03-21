@@ -29,7 +29,7 @@ const Home: React.FC = () => {
             Your personalized fitness journey starts here
           </p>
           <Link to="/dashboard">
-            <Button className="bg-fitness-600 hover:bg-fitness-700 text-white px-8 py-6 text-lg animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <Button className="bg-red-500 hover:bg-red-600 text-white px-8 py-6 text-lg animate-fade-up" style={{ animationDelay: '0.2s' }}>
               Start Planning Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -49,22 +49,22 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard
-              icon={<Brain className="h-12 w-12 text-fitness-500" />}
+              icon={<Brain className="h-8 w-8 text-fitness-600" />}
               title="AI-Generated Plans"
               description="Personalized workout routines created by our advanced AI algorithm based on your fitness goals."
             />
             <FeatureCard
-              icon={<Dumbbell className="h-12 w-12 text-fitness-500" />}
+              icon={<Dumbbell className="h-8 w-8 text-fitness-600" />}
               title="Customized Goals"
               description="Set your fitness goals - strength, cardio, flexibility - and get a tailored program."
             />
             <FeatureCard
-              icon={<Calendar className="h-12 w-12 text-fitness-500" />}
+              icon={<Calendar className="h-8 w-8 text-fitness-600" />}
               title="Weekly Scheduling"
               description="Organize your workouts with weekly schedules that adapt to your availability."
             />
             <FeatureCard
-              icon={<Heart className="h-12 w-12 text-fitness-500" />}
+              icon={<Heart className="h-8 w-8 text-fitness-600" />}
               title="Progress Tracking"
               description="Track your progress, set personal records, and visualize your fitness journey."
             />
@@ -105,13 +105,13 @@ const FeatureCard: React.FC<{
   description: string;
 }> = ({ icon, title, description }) => {
   return (
-    <Card className="h-full elegant-card transition-all duration-300 border border-slate-100 hover:border-fitness-500 hover:shadow-[0_0_0_1px_rgba(89,142,255,0.3)]">
-      <CardHeader className="pb-2">
-        <div className="mb-4 transition-transform duration-300 group-hover:scale-110">{icon}</div>
-        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+    <Card className="h-full elegant-card hover:translate-y-[-5px]">
+      <CardHeader>
+        <div className="mb-4">{icon}</div>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="text-base text-slate-600">{description}</CardDescription>
+        <CardDescription className="text-base">{description}</CardDescription>
       </CardContent>
     </Card>
   );
