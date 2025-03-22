@@ -338,7 +338,7 @@ const Profile = () => {
             )}
           </div>
 
-          {/* RIGHT SECTION */}
+          {/* RIGHT SECTION */}                                                                                             
           <div className="md:col-span-1">
             <KendoCard
               style={{

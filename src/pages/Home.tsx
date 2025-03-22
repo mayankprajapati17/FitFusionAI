@@ -1,9 +1,9 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dumbbell, Heart, Calendar, Brain, ArrowRight } from 'lucide-react';
+import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowRight, Brain, Calendar, Dumbbell, Heart } from 'lucide-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
@@ -89,11 +89,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-slate-900 text-white/80">
-        <div className="fitness-container text-center">
-          <p>Built with shadcn/ui by FitTrack AI</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
@@ -105,7 +101,7 @@ const FeatureCard: React.FC<{
   description: string;
 }> = ({ icon, title, description }) => {
   return (
-    <Card className="h-full elegant-card hover:translate-y-[-5px]">
+    <Card className="h-full elegant-card hover:translate-y-[-5px] transition-all duration-300 hover:shadow-[0_8px_20px_rgba(58,109,245,0.4)]">
       <CardHeader>
         <div className="mb-4">{icon}</div>
         <CardTitle>{title}</CardTitle>
