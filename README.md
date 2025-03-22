@@ -35,6 +35,8 @@ Interactive Dashboard: A clean and responsive design for managing fitness goals 
 11 Progress Bar: Show progress visually with stylish bars.
 
 12 Date Input: Enable seamless date selection and input.
+
+
 🚀 Tech Stack
 Frontend: React.js with Vite for a fast and efficient development experience.
 
