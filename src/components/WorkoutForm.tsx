@@ -1,9 +1,9 @@
-import { Button } from '@progress/kendo-react-buttons';
-import { DatePicker } from '@progress/kendo-react-dateinputs';
-import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { Input, NumericTextBox, TextArea } from '@progress/kendo-react-inputs';
-import { FloatingLabel } from '@progress/kendo-react-labels';
+import { Button } from '@progress/kendo-react-buttons';       //Imported kendo button
+import { DatePicker } from '@progress/kendo-react-dateinputs';    //Imported kendo dateinput
+import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';   //Imported kendo dialogs
+import { DropDownList } from '@progress/kendo-react-dropdowns';             //Imported kendo dropdowns
+import { Input, NumericTextBox, TextArea } from '@progress/kendo-react-inputs';     //Imported kendoimported inputs
+import { FloatingLabel } from '@progress/kendo-react-labels';                      //Imported kendo FloatingLabel
 import React, { useState } from 'react';
 import { ExerciseType, WorkoutFormData } from '../types/workout';
 
