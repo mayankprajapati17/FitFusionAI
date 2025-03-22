@@ -105,7 +105,7 @@ const FeatureCard: React.FC<{
   description: string;
 }> = ({ icon, title, description }) => {
   return (
-    <Card className="h-full elegant-card hover:translate-y-[-5px]">
+    <Card className="h-full elegant-card hover:translate-y-[-5px] transition-all duration-300 hover:shadow-[0_8px_20px_rgba(58,109,245,0.4)]">
       <CardHeader>
         <div className="mb-4">{icon}</div>
         <CardTitle>{title}</CardTitle>
