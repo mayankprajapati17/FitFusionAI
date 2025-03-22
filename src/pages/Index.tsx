@@ -1,3 +1,4 @@
+
 import CategoryTabs from '@/components/CategoryTabs';
 import Navbar from '@/components/Navbar';
 import PersonalBestCard from '@/components/PersonalBestCard';
@@ -99,15 +100,7 @@ const Index = () => {
 
       <main className="fitness-container py-8">
         <div className="flex justify-between items-start gap-6 flex-col lg:flex-row">
-          <div className="w-full lg:w-3/4">
-            <h1 className="text-3xl font-bold mb-6 fade-up">Your Fitness Journey</h1>
-
-            <CategoryTabs
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              workoutCounts={workoutCounts}
-            />
-
+          <div className="w-full lg:w-1/5">
             <ExerciseButtons
               exerciseNames={exerciseNames}
               onExerciseClick={(exerciseName) => {
@@ -121,6 +114,16 @@ const Index = () => {
                 }
               }}
             />
+          </div>
+
+          <div className="w-full lg:w-3/5">
+            <h1 className="text-3xl font-bold mb-6 fade-up">Your Fitness Journey</h1>
+
+            <CategoryTabs
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              workoutCounts={workoutCounts}
+            />
 
             <WorkoutTable
               workouts={filteredWorkouts}
@@ -131,8 +134,8 @@ const Index = () => {
             />
           </div>
 
-          <div className="w-full lg:w-1/4 space-y-6 mt-6 lg:mt-0">
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mb-4 lg:mb-0">
+          <div className="w-full lg:w-1/5 space-y-6 mt-6 lg:mt-0">
+            <div className="flex flex-col gap-4 mb-4">
               <Button 
                 onClick={() => setIsFormOpen(true)} 
                 className="bg-red-500 hover:bg-red-600 flex items-center gap-2 text-white"

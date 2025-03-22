@@ -1,14 +1,10 @@
 
 import React from 'react';
-import { Button } from '@progress/kendo-react-buttons';
 import {
   Dumbbell,
-  Bike,
-  Scale,
-  Utensils,
   Timer,
   Waves,
-  Flame
+  Scale,
 } from 'lucide-react';
 import StretchingIcon from './icons/StretchingIcon';
 
@@ -25,25 +21,25 @@ const ExerciseButtons: React.FC<ExerciseButtonsProps> = ({ exerciseNames, onExer
     if (lowerName.includes('push')) return <Dumbbell size={16} />;
     if (lowerName.includes('bench')) return <Dumbbell size={16} />;
     if (lowerName.includes('yoga') || lowerName.includes('stretch')) return <StretchingIcon size={16} />;
-    if (lowerName.includes('cycle') || lowerName.includes('bike')) return <Bike size={16} />;
+    if (lowerName.includes('cycle') || lowerName.includes('bike')) return <Waves size={16} />;
     if (lowerName.includes('swim')) return <Waves size={16} />;
     if (lowerName.includes('squat') || lowerName.includes('deadlift')) return <Scale size={16} />;
-    return <Flame size={16} />; // Default icon
+    return <Dumbbell size={16} />; // Default icon
   };
 
   return (
-    <div className="mb-6 flex flex-wrap gap-2 animate-fade-up">
+    <div className="mb-6 flex flex-col border rounded-md animate-fade-up">
+      <div className="px-4 py-3 font-medium text-gray-600 border-b">
+        Exercise
+      </div>
       {exerciseNames.map((name) => (
-        <Button
+        <button
           key={name}
           onClick={() => onExerciseClick(name)}
-          themeColor="primary"
-          rounded="large"
-          className="hover:bg-fitness-600 focus:bg-fitness-700 transition-colors"
+          className="flex items-center px-4 py-3 text-left hover:bg-slate-50 border-b last:border-b-0 transition-colors"
         >
-          {getExerciseIcon(name)}
-          <span className="ml-2">{name}</span>
-        </Button>
+          <span className="text-gray-800">{name}</span>
+        </button>
       ))}
     </div>
   );
