@@ -10,14 +10,31 @@ Real-time Progress Tracking: Monitor your fitness journey with visually appealin
 
 Interactive Dashboard: A clean and responsive design for managing fitness goals and activities.
 
-KendoReact Components: Smooth integration of intuitive and powerful UI components.
+🌟KendoReact Components: Smooth integration of intuitive and powerful UI components.
 
-KendoReact Scheduler: For scheduling workouts and activities.
+1 Common Utilities: Enhance the functionality of your app with shared utilities.
 
-KendoReact Charts: Display progress visually through interactive charts and graphs.
+2 Animation: Add dynamic visual effects for better user experience.
 
-KendoReact Grid: Efficiently manage and display data in tabular formats.
+3 Button: Create interactive and responsive buttons.
 
+4 Dialog: Display popups for user interaction or alerts.
+
+5 Dropdown: Simplify selection inputs with dropdown menus.
+
+6 Indicator: Provide visual feedback for user actions or status changes.
+
+7 Input: Streamline data entry with various input fields.
+
+8 Label: Add clear and descriptive labels for form elements.
+
+9 Layout: Organize and structure your app's UI effectively.
+
+10 Notification: Alert users with informative messages.
+
+11 Progress Bar: Show progress visually with stylish bars.
+
+12 Date Input: Enable seamless date selection and input.
 🚀 Tech Stack
 Frontend: React.js with Vite for a fast and efficient development experience.
 
