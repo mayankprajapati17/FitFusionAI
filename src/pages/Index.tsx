@@ -13,6 +13,7 @@ import { filterWorkoutsByType, generateMockWorkouts } from '@/utils/mockData';
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Notification, NotificationGroup } from '@progress/kendo-react-notification';
 
 const Index = () => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -22,6 +23,7 @@ const Index = () => {
   const [sortColumn, setSortColumn] = useState<keyof Workout>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [completedWorkouts, setCompletedWorkouts] = useState<{[key: string]: boolean}>({});
+  const [notification, setNotification] = useState<{ show: boolean, exercise: string } | null>(null);
 
   useEffect(() => {
     const initialWorkouts = generateMockWorkouts();
@@ -85,6 +87,21 @@ const Index = () => {
     setCompletedWorkouts(updatedWorkouts);
   };
 
+  const handleExerciseClick = (exerciseName: string) => {
+    const filtered = workouts.filter(w => w.exerciseName === exerciseName);
+    if (filtered.length > 0) {
+      setActiveTab(filtered[0].exerciseType);
+      
+      // Show notification
+      setNotification({ show: true, exercise: exerciseName });
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+    }
+  };
+
   const workoutCounts = {
     All: workouts.length,
     Cardio: workouts.filter(w => w.exerciseType === 'Cardio').length,
@@ -103,16 +120,7 @@ const Index = () => {
           <div className="w-full lg:w-1/5">
             <ExerciseButtons
               exerciseNames={exerciseNames}
-              onExerciseClick={(exerciseName) => {
-                const filtered = workouts.filter(w => w.exerciseName === exerciseName);
-                if (filtered.length > 0) {
-                  setActiveTab(filtered[0].exerciseType);
-                  toast({
-                    title: `${exerciseName} workouts`,
-                    description: `Showing ${filtered.length} ${exerciseName} workouts.`,
-                  });
-                }
-              }}
+              onExerciseClick={handleExerciseClick}
             />
           </div>
 
@@ -156,6 +164,22 @@ const Index = () => {
         onSubmit={handleAddWorkout}
         onCancel={() => setIsFormOpen(false)}
       />
+
+      {/* Kendo React Notification */}
+      <NotificationGroup style={{ position: 'fixed', right: 16, top: 16 }}>
+        {notification && notification.show && (
+          <Notification
+            type={{ style: 'success', icon: true }}
+            closable={true}
+            onClose={() => setNotification(null)}
+          >
+            <div>
+              <h3 className="font-semibold">{notification.exercise} Workouts</h3>
+              <p>Filtering workouts for {notification.exercise}</p>
+            </div>
+          </Notification>
+        )}
+      </NotificationGroup>
     </div>
   );
 };

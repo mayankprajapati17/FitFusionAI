@@ -38,6 +38,7 @@ const ExerciseButtons: React.FC<ExerciseButtonsProps> = ({ exerciseNames, onExer
           onClick={() => onExerciseClick(name)}
           className="flex items-center px-4 py-3 text-left hover:bg-slate-50 border-b last:border-b-0 transition-colors"
         >
+          <span className="mr-2">{getExerciseIcon(name)}</span>
           <span className="text-gray-800">{name}</span>
         </button>
       ))}
