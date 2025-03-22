@@ -1,4 +1,3 @@
-
 import CategoryTabs from '@/components/CategoryTabs';
 import Navbar from '@/components/Navbar';
 import PersonalBestCard from '@/components/PersonalBestCard';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import WorkoutForm from '@/components/WorkoutForm';
 import WorkoutTable from '@/components/WorkoutTable';
+import ExerciseButtons from '@/components/ExerciseButtons';
 import { ExerciseType, Workout, WorkoutFormData } from '@/types/workout';
 import { filterWorkoutsByType, generateMockWorkouts } from '@/utils/mockData';
 import { Plus } from 'lucide-react';
@@ -22,17 +22,14 @@ const Index = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [completedWorkouts, setCompletedWorkouts] = useState<{[key: string]: boolean}>({});
 
-  // Load mock data
   useEffect(() => {
     const initialWorkouts = generateMockWorkouts();
     setWorkouts(initialWorkouts);
   }, []);
 
-  // Apply filters and sorting
   useEffect(() => {
     let filtered = filterWorkoutsByType(workouts, activeTab);
 
-    // Apply sorting
     filtered = [...filtered].sort((a, b) => {
       const aValue = a[sortColumn];
       const bValue = b[sortColumn];
@@ -87,13 +84,14 @@ const Index = () => {
     setCompletedWorkouts(updatedWorkouts);
   };
 
-  // Count workouts by type
   const workoutCounts = {
     All: workouts.length,
     Cardio: workouts.filter(w => w.exerciseType === 'Cardio').length,
     Strength: workouts.filter(w => w.exerciseType === 'Strength').length,
     Flexibility: workouts.filter(w => w.exerciseType === 'Flexibility').length,
   };
+
+  const exerciseNames = [...new Set(workouts.map(w => w.exerciseName))];
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -108,6 +106,20 @@ const Index = () => {
               activeTab={activeTab}
               onTabChange={setActiveTab}
               workoutCounts={workoutCounts}
+            />
+
+            <ExerciseButtons
+              exerciseNames={exerciseNames}
+              onExerciseClick={(exerciseName) => {
+                const filtered = workouts.filter(w => w.exerciseName === exerciseName);
+                if (filtered.length > 0) {
+                  setActiveTab(filtered[0].exerciseType);
+                  toast({
+                    title: `${exerciseName} workouts`,
+                    description: `Showing ${filtered.length} ${exerciseName} workouts.`,
+                  });
+                }
+              }}
             />
 
             <WorkoutTable
