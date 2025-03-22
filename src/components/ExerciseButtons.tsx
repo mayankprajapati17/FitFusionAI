@@ -32,14 +32,14 @@ const ExerciseButtons: React.FC<ExerciseButtonsProps> = ({ exerciseNames, onExer
   };
 
   return (
-    <div className="mb-6 flex flex-col gap-2 animate-fade-up">
+    <div className="mb-6 flex flex-wrap gap-2 animate-fade-up">
       {exerciseNames.map((name) => (
         <Button
           key={name}
           onClick={() => onExerciseClick(name)}
           themeColor="primary"
-          rounded="medium"
-          className="w-full text-left justify-start px-4 py-3 hover:bg-fitness-600 focus:bg-fitness-700 transition-colors"
+          rounded="large"
+          className="hover:bg-fitness-600 focus:bg-fitness-700 transition-colors"
         >
           {getExerciseIcon(name)}
           <span className="ml-2">{name}</span>

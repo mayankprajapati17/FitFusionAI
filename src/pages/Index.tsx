@@ -99,36 +99,6 @@ const Index = () => {
 
       <main className="fitness-container py-8">
         <div className="flex justify-between items-start gap-6 flex-col lg:flex-row">
-          <div className="w-full lg:w-1/4 space-y-6">
-            <div className="bg-white p-5 rounded-xl shadow-elegant">
-              <h2 className="text-lg font-semibold mb-4">Exercises</h2>
-              <ExerciseButtons
-                exerciseNames={exerciseNames}
-                onExerciseClick={(exerciseName) => {
-                  const filtered = workouts.filter(w => w.exerciseName === exerciseName);
-                  if (filtered.length > 0) {
-                    setActiveTab(filtered[0].exerciseType);
-                    toast({
-                      title: `${exerciseName} workouts`,
-                      description: `Showing ${filtered.length} ${exerciseName} workouts.`,
-                    });
-                  }
-                }}
-              />
-              
-              <Button 
-                onClick={() => setIsFormOpen(true)} 
-                className="w-full mt-4 bg-red-500 hover:bg-red-600 flex items-center gap-2 text-white"
-              >
-                <Plus className="h-4 w-4" />
-                Log Workout
-              </Button>
-            </div>
-            
-            <ProgressChart workouts={workouts} completedWorkouts={completedWorkouts} />
-            <PersonalBestCard workouts={workouts} />
-          </div>
-
           <div className="w-full lg:w-3/4">
             <h1 className="text-3xl font-bold mb-6 fade-up">Your Fitness Journey</h1>
 
@@ -138,6 +108,20 @@ const Index = () => {
               workoutCounts={workoutCounts}
             />
 
+            <ExerciseButtons
+              exerciseNames={exerciseNames}
+              onExerciseClick={(exerciseName) => {
+                const filtered = workouts.filter(w => w.exerciseName === exerciseName);
+                if (filtered.length > 0) {
+                  setActiveTab(filtered[0].exerciseType);
+                  toast({
+                    title: `${exerciseName} workouts`,
+                    description: `Showing ${filtered.length} ${exerciseName} workouts.`,
+                  });
+                }
+              }}
+            />
+
             <WorkoutTable
               workouts={filteredWorkouts}
               onSortChange={handleSortChange}
@@ -145,6 +129,21 @@ const Index = () => {
               sortDirection={sortDirection}
               onWorkoutStatusChange={handleWorkoutStatusChange}
             />
+          </div>
+
+          <div className="w-full lg:w-1/4 space-y-6 mt-6 lg:mt-0">
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mb-4 lg:mb-0">
+              <Button 
+                onClick={() => setIsFormOpen(true)} 
+                className="bg-red-500 hover:bg-red-600 flex items-center gap-2 text-white"
+              >
+                <Plus className="h-4 w-4" />
+                Log Workout
+              </Button>
+              
+              <ProgressChart workouts={workouts} completedWorkouts={completedWorkouts} />
+            </div>
+            <PersonalBestCard workouts={workouts} />
           </div>
         </div>
       </main>
