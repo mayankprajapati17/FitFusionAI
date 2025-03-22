@@ -1,10 +1,13 @@
+
 import {
-    Dumbbell,
-    Scale,
-    Timer,
-    Waves,
+  Dumbbell,
+  Scale,
+  Timer,
+  Waves,
 } from 'lucide-react';
 import React from 'react';
+
+
 import StretchingIcon from './icons/StretchingIcon';
 
 interface ExerciseButtonsProps {
