@@ -1,69 +1,71 @@
-# Welcome to your Lovable project
+FitFusionAI
+FitFusionAI is an AI-powered fitness application designed to revolutionize your workout experience. With advanced algorithms and user-friendly components, it aims to provide personalized fitness guidance and tracking through a seamless interface.
 
-## Project info
+🌟 Features
+AI Chatbot (Powered by Gemini API): Get real-time answers and guidance on fitness, nutrition, and workout routines through an intelligent chatbot.
 
-**URL**: https://lovable.dev/projects/79cbed18-d375-4ced-9802-358a91dad209
+Personalized Fitness Plans: AI-driven algorithms generate workout plans tailored to your goals.
 
-## How can I edit this code?
+Real-time Progress Tracking: Monitor your fitness journey with visually appealing graphs and stats.
 
-There are several ways of editing your application.
+Interactive Dashboard: A clean and responsive design for managing fitness goals and activities.
 
-**Use Lovable**
+KendoReact Components: Smooth integration of intuitive and powerful UI components.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/79cbed18-d375-4ced-9802-358a91dad209) and start prompting.
+KendoReact Scheduler: For scheduling workouts and activities.
 
-Changes made via Lovable will be committed automatically to this repo.
+KendoReact Charts: Display progress visually through interactive charts and graphs.
 
-**Use your preferred IDE**
+KendoReact Grid: Efficiently manage and display data in tabular formats.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🚀 Tech Stack
+Frontend: React.js with Vite for a fast and efficient development experience.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+UI Components: KendoReact by Progress for a polished and professional user interface.
 
-Follow these steps:
+AI Integration: Gemini API for powering the chatbot feature.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Backend: Node.js with Express (or mention your backend if applicable).
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Deployment: Deployed on Vercel for high-performance hosting.
 
-# Step 3: Install the necessary dependencies.
-npm i
+Styling: CSS3 with responsive design principles.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+APIs: Integrated APIs for AI and fitness data processing.
 
-**Edit a file directly in GitHub**
+🌐 Live Demo
+Experience the application live: https://fit-fusion-ai-delta.vercel.app/
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+📂 How to Use
+Clone the repository:
 
-**Use GitHub Codespaces**
+bash
+git clone https://github.com/mayankprajapati17/FitFusionAI.git
+Navigate to the project directory:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+bash
+cd FitFusionAI
+Install dependencies:
 
-## What technologies are used for this project?
+bash
+npm install
+Start the development server:
 
-This project is built with .
+bash
+npm start
+Open your browser and go to http://localhost:3000.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+🤖 AI Chatbot
+The AI chatbot is powered by the Gemini API. It provides:
 
-## How can I deploy this project?
+Instant responses to fitness and health-related queries.
 
-Simply open [Lovable](https://lovable.dev/projects/79cbed18-d375-4ced-9802-358a91dad209) and click on Share -> Publish.
+Tailored suggestions based on user input.
 
-## I want to use a custom domain - is that possible?
+An intuitive conversational interface.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+🤝 Contributions
+Contributions are welcome! Please open an issue or submit a pull request to propose changes.
+
+📝 License
+This project is licensed under the MIT License. See the LICENSE file for details.
